@@ -1,4 +1,3 @@
-jing
 <!--
 Template Name: Metronic - Bootstrap 4 HTML, React, Angular 11 & VueJS Admin Dashboard Theme
 Author: KeenThemes

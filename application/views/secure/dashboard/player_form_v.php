@@ -288,6 +288,138 @@ $this->load->view('secure/m_header');
                         </div>
                         <!--end::Card-->
                         
+                        <!--begin::Card-->
+                        <div class="card card-custom gutter-b">
+                                <div class="card-body">
+                                        <!--begin::Top-->
+                                        <div class="d-flex">
+                                               
+                                                <!--begin: Info-->
+                                                <div class="flex-grow-1">
+                                                        <!--begin::Title-->
+                                                        <div class="d-flex align-items-center justify-content-between flex-wrap mt-2">
+                                                                <!--begin::User-->
+                                                                <div class="mr-3">
+                                                                        <!--begin::Name-->
+                                                                        <a href="#" class="d-flex align-items-center text-dark text-hover-primary font-size-h5 font-weight-bold mr-3">Kelana United VS KRU FC 
+                                                                        <i class="flaticon2-correct text-success icon-md ml-2"></i></a>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Contacts-->
+                                                                        <div class="d-flex flex-wrap my-2">
+                                                                                <a href="#" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                                                                <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
+                                                                                        <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Puzzle.svg-->
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                                                                <rect x="0" y="0" width="24" height="24"/>
+                                                                                                <path d="M19,11 L20,11 C21.6568542,11 23,12.3431458 23,14 C23,15.6568542 21.6568542,17 20,17 L19,17 L19,20 C19,21.1045695 18.1045695,22 17,22 L5,22 C3.8954305,22 3,21.1045695 3,20 L3,17 L5,17 C6.65685425,17 8,15.6568542 8,14 C8,12.3431458 6.65685425,11 5,11 L3,11 L3,8 C3,6.8954305 3.8954305,6 5,6 L8,6 L8,5 C8,3.34314575 9.34314575,2 11,2 C12.6568542,2 14,3.34314575 14,5 L14,6 L17,6 C18.1045695,6 19,6.8954305 19,8 L19,11 Z" fill="#000000" opacity="0.3"/>
+                                                                                            </g>
+                                                                                        </svg>
+                                                                                        <!--end::Svg Icon-->
+                                                                                </span>Season 6</a>
+                                                                                <a href="#" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                                                                <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
+                                                                                        <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Git1.svg-->
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                                                                <rect x="0" y="0" width="24" height="24"/>
+                                                                                                <rect fill="#000000" opacity="0.3" x="11" y="8" width="2" height="9" rx="1"/>
+                                                                                                <path d="M12,21 C13.1045695,21 14,20.1045695 14,19 C14,17.8954305 13.1045695,17 12,17 C10.8954305,17 10,17.8954305 10,19 C10,20.1045695 10.8954305,21 12,21 Z M12,23 C9.790861,23 8,21.209139 8,19 C8,16.790861 9.790861,15 12,15 C14.209139,15 16,16.790861 16,19 C16,21.209139 14.209139,23 12,23 Z" fill="#000000" fill-rule="nonzero"/>
+                                                                                                <path d="M12,7 C13.1045695,7 14,6.1045695 14,5 C14,3.8954305 13.1045695,3 12,3 C10.8954305,3 10,3.8954305 10,5 C10,6.1045695 10.8954305,7 12,7 Z M12,9 C9.790861,9 8,7.209139 8,5 C8,2.790861 9.790861,1 12,1 C14.209139,1 16,2.790861 16,5 C16,7.209139 14.209139,9 12,9 Z" fill="#000000" fill-rule="nonzero"/>
+                                                                                            </g>
+                                                                                        </svg>
+                                                                                        <!--end::Svg Icon-->
+                                                                                </span>Matchweek 2</a>
+                                                                                <a href="#" class="text-muted text-hover-primary font-weight-bold">
+                                                                                <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
+                                                                                        <!--begin::Svg Icon | path:assets/media/svg/icons/Map/Marker2.svg-->
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                                                                        <rect x="0" y="0" width="24" height="24" />
+                                                                                                        <path d="M9.82829464,16.6565893 C7.02541569,15.7427556 5,13.1079084 5,10 C5,6.13400675 8.13400675,3 12,3 C15.8659932,3 19,6.13400675 19,10 C19,13.1079084 16.9745843,15.7427556 14.1717054,16.6565893 L12,21 L9.82829464,16.6565893 Z M12,12 C13.1045695,12 14,11.1045695 14,10 C14,8.8954305 13.1045695,8 12,8 C10.8954305,8 10,8.8954305 10,10 C10,11.1045695 10.8954305,12 12,12 Z" fill="#000000" />
+                                                                                                </g>
+                                                                                        </svg>
+                                                                                        <!--end::Svg Icon-->
+                                                                                </span>Eco Ardence Setia Alam</a>
+                                                                        </div>
+                                                                        <!--end::Contacts-->
+                                                                </div>
+                                                                <!--begin::User-->
+                                                                
+                                                        </div>
+                                                        <!--end::Title-->
+                                                        
+                                                </div>
+                                                <!--end::Info-->
+                                        </div>
+                                        <!--end::Top-->
+                                        <!--begin::Separator-->
+                                        <div class="separator separator-solid my-7"></div>
+                                        <!--end::Separator-->
+                                        <!--begin::Bottom-->
+                                        <div class="d-flex align-items-center flex-wrap">
+                                                <!--begin: Item-->
+                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                                                        <span class="mr-4">
+                                                                <i class="flaticon-network icon-2x text-muted font-weight-bold"></i>
+                                                        </span>
+                                                        <div class="d-flex flex-column text-dark-75">
+                                                                <span class="font-weight-bolder font-size-sm">Position</span>
+                                                                <span class=" font-weight-bold font-size-h5">Striker</span>
+                                                        </div>
+                                                </div>
+                                                <!--end: Item-->
+                                                <!--begin: Item-->
+                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                                                        <span class="mr-4">
+                                                                <i class="flaticon2-hourglass-1 icon-2x text-muted font-weight-bold"></i>
+                                                        </span>
+                                                        <div class="d-flex flex-column text-dark-75">
+                                                                <span class="font-weight-bolder font-size-sm">Minutes Played</span>
+                                                                <span class="font-size-h5 font-weight-bold">72 min</span>
+                                                        </div>
+                                                </div>
+                                                <!--end: Item-->
+                                                <!--begin: Item-->
+                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                                                        <span class="mr-4">
+                                                                <i class="flaticon-pie-chart icon-2x text-muted font-weight-bold"></i>
+                                                        </span>
+                                                        <div class="d-flex flex-column text-dark-75">
+                                                                <span class="font-weight-bolder font-size-sm">Shots</span>
+                                                                <span class="font-weight-bold font-size-h5">4</span>
+                                                        </div>
+                                                </div>
+                                                <!--end: Item-->
+                                                <!--begin: Item-->
+                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                                                        <span class="mr-4">
+                                                                <i class="flaticon-file-2 icon-2x text-muted font-weight-bold"></i>
+                                                        </span>
+                                                         <div class="d-flex flex-column text-dark-75">
+                                                                <span class="font-weight-bolder font-size-sm">Cards</span>
+                                                                <span class="font-weight-bold font-size-h5">None</span>
+                                                        </div>
+                                                </div>
+                                                <!--end: Item-->
+                                                <!--begin: Item-->
+                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                                                        <span class="mr-4">
+                                                                <i class="flaticon-chat-1 icon-2x text-muted font-weight-bold"></i>
+                                                        </span>
+                                                         <div class="d-flex flex-column text-dark-75">
+                                                                <span class="font-weight-bolder font-size-sm">Fouls</span>
+                                                                <span class="font-weight-bolder font-size-h5">2</span>
+                                                        </div>
+                                                </div>
+                                                <!--end: Item-->
+                                        </div>
+                                        <!--end::Bottom-->
+                                </div>
+                        </div>
+                        <!--end::Card-->
+                        
+                        
 		</div>
 		<!--end::Container-->
 	</div>
