@@ -73,18 +73,6 @@ $this->load->view('secure/m_header');
 								</div>
 								<span class="form-text text-muted">Please club shot name</span>
 							</div>
-							<div class="col-lg-6">
-								<label>Club Status:</label>
-								<div class="input-group">
-									<select class="form-control" name="status"  id="status">
-										<option disabled selected >Choose Status</option>
-										<option value="1" <?php echo isset($form_data['status']) && $form_data['status'] == '1' ? 'selected' : '';?> >Active</option>
-										<option value="0" <?php echo isset($form_data['status']) && $form_data['status'] == '0' ? 'selected' : '';?> >Inactive</option>
-									</select>
-									<div class="input-group-append"><span class="input-group-text"><i class="fas fa-adjust"></i></span></div>
-								</div>
-								<span class="form-text text-muted">Please select club status</span>
-							</div>
 						</div>
 						<div class="form-group row">
 							<label class="col-3 col-form-label">Season:</label>

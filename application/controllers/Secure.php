@@ -149,8 +149,8 @@ class Secure extends CI_Controller {
 		}
 		
 		$data['team'] = $this->Team_m->get_team();
-		
-		$this->load->view('secure/dashboard/player_form_v.php', $data);
+                
+                $this->load->view('secure/dashboard/player_form_v.php', $data);
 	}
 	
 	function player_quick_update()
@@ -195,7 +195,8 @@ class Secure extends CI_Controller {
                     $data['card_title'] = '<span class="card-icon"><i class="fas fa-user"></i></span>Update Player Form';
                     $data['breadcrumbs'] = array('Players'=>'secure/listing/player','Update Player'=>'secure/player_form');
                     $data['team'] = $this->Team_m->get_team();
-
+                    
+                    $data['match_history'] = $this->Players_m->player_match_history($player_id);
                     $this->load->view('secure/dashboard/player_form_v.php', $data);
 		}
 	}

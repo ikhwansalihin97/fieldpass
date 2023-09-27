@@ -72,65 +72,52 @@
 					<span class="form-text text-muted">Please enter player value</span>
 				</div>
 				<div class="col-lg-6">
-					<label>Team:</label>
-					<div class="input-group">
-						<select class="form-control" name="team_id"  id="team_id">
-							<option disabled selected >Choose team</option>
-								<?php
-									if(isset($team) && is_array($team) && sizeof($team) > 0)
-									{
-										foreach($team as $tkey=>$tvalue)
-											echo isset($form_data['team_id']) && $form_data['team_id'] == $tvalue->id ? '<option value="'.$tvalue->id.'" selected >' . $tvalue->name . '</option>' : '<option value="'.$tvalue->id.'" >' . $tvalue->name . '</option>';
-									}
-								?>
-						</select>
-						<div class="input-group-append"><span class="input-group-text"><i class="fas fa-users"></i></span></div>
-					</div>
-					<span class="form-text text-muted">Please select player team</span>
-				</div>
+                                    <label>Team:</label>
+                                    <div class="input-group">
+                                        <select class="form-control" name="team_id"  id="team_id">
+                                                <option disabled selected >Choose team</option>
+                                                <option value="" > NO CLUB </option>
+                                                <?php
+                                                if(isset($team) && is_array($team) && sizeof($team) > 0)
+                                                {
+                                                    foreach($team as $tkey=>$tvalue)
+                                                        echo isset($form_data['team_id']) && $form_data['team_id'] == $tvalue->id ? '<option value="'.$tvalue->id.'" selected >' . $tvalue->name . '</option>' : '<option value="'.$tvalue->id.'" >' . $tvalue->name . '</option>';
+                                                }
+                                                ?>
+                                        </select>
+                                        <div class="input-group-append"><span class="input-group-text"><i class="fas fa-users"></i></span></div>
+                                    </div>
+                                    <span class="form-text text-muted">Please select player team</span>
+                                </div>
 			</div>
 			<div class="form-group row">
-				<div class="col-lg-6">
-					<label>Jersey Number:</label>
-					<div class="input-group">
-						<input type="text" class="form-control" placeholder="Enter jersey number" name="jersey_number" value="<?php echo isset($form_data['jersey_number']) && $form_data['jersey_number'] != '' ? $form_data['jersey_number'] : '';?>" />
-						<div class="input-group-append"><span class="input-group-text"><i class="fas fa-tshirt"></i></span></div>
-					</div>
-					<span class="form-text text-muted">Please enter player jersey number</span>
-				</div>
-				<div class="col-lg-6">
-					<label>Player Image(URL):</label>
-					<div class="input-group">
-						<input type="text" class="form-control" placeholder="Enter player image URL" name="image_url" value="<?php echo isset($form_data['image_url']) && $form_data['image_url'] != '' ? $form_data['image_url'] : '';?>" />
-						<div class="input-group-append"><span class="input-group-text"><i class="far fa-image"></i></span></div>
-					</div>
-					<span class="form-text text-muted">Please enter player image url</span>
-				</div>
-			</div>
-			<div class="form-group row">
-				<div class="col-lg-6">
-					<label>Player Availability:</label>
-					<div class="input-group">
-						<select class="form-control" name="availability"  id="availability">
-							<option disabled selected >Choose status</option>
-							<option value="1" <?php echo isset($form_data['availability']) && $form_data['availability'] == '1' ? 'selected' : '';?> >Active</option>
-							<option value="0" <?php echo isset($form_data['availability']) && $form_data['availability'] == '0' ? 'selected' : '';?> >Inactive</option>
-						</select>
-						<div class="input-group-append"><span class="input-group-text"><i class="fas fa-toggle-on"></i></span></div>
-					</div>
-					<span class="form-text text-muted">Please select player availability</span>
-				</div>
+                            <div class="col-lg-6">
+                                    <label>Jersey Number:</label>
+                                    <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Enter jersey number" name="jersey_number" value="<?php echo isset($form_data['jersey_number']) && $form_data['jersey_number'] != '' ? $form_data['jersey_number'] : '';?>" />
+                                            <div class="input-group-append"><span class="input-group-text"><i class="fas fa-tshirt"></i></span></div>
+                                    </div>
+                                    <span class="form-text text-muted">Please enter player jersey number</span>
+                            </div>
+                            <div class="col-lg-6">
+                                <label>Identification Card:</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Enter Identification Card Number" name="identity_number" value="<?php echo isset($form_data['identity_number']) && $form_data['identity_number'] != '' ? $form_data['identity_number'] : '';?>" />
+                                    <div class="input-group-append"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
+                                </div>
+                                <span class="form-text text-muted">Please enter player identity number eg: 971109-10-5774</span>
+                            </div>
 			</div>
 		</div>
 		<div class="card-footer">
-			<div class="row">
-				<div class="col-lg-6">
-					<button type="reset" class="btn btn-secondary">Cancel</button>
-				</div>
-				<div class="col-lg-6 text-lg-right">
-					<button type="submit" class="btn btn-primary mr-2"><?php echo isset($form_data['id']) && $form_data['id'] != '' ? 'Update' : 'Submit';?></button>
-				</div>
-			</div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                                <button type="reset" class="btn btn-secondary">Cancel</button>
+                        </div>
+                        <div class="col-lg-6 text-lg-right">
+                                <button type="submit" class="btn btn-primary mr-2"><?php echo isset($form_data['id']) && $form_data['id'] != '' ? 'Update' : 'Submit';?></button>
+                        </div>
+                    </div>
 		</div>
 	</form>
 	<!--end::Form-->

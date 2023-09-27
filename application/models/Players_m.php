@@ -320,23 +320,32 @@ class Players_m extends CI_Model {
 				return $response;
 			}
 			
-			if(isset($post['image_url']) && $post['image_url'] == "" )
+			if(isset($post['identity_number']) && $post['identity_number'] == "" )
 			{
-                            if(isset($files['profile_avatar']) && $files['profile_avatar']['error'] == 4)
-                            {
-				$response['result'] = false;
-				$response['message'] = "No player avatar uploaded and player image url field blank, please fill in either to proceed.";
-				$response['input'] = "image_url"; 
-				$response['type'] = "input";
-				
-				return $response;
+                            $response['result'] = false;
+                            $response['message'] = "Player identity number  field blank, please fill in to proceed.";
+                            $response['input'] = "identity_number"; 
+                            $response['type'] = "input";
+
+                            return $response;
+			}
+                        else
+                        {
+                           if(!preg_match("/^\d{6}-\d{2}-\d{4}$/", trim($post["identity_number"]))) 
+                           {
+                                $response['result'] = false;
+                                $response['message'] = "Player identity number format is incorrect, please fix field to proceed.";
+                                $response['input'] = "identity_number"; 
+                                $response['type'] = "input";
+
+                                return $response;
                             }
-			}
-			
-			if(isset($post['availability']) && $post['availability'] == 0)
-			{
-				$post['team_id'] = 100;
-			}
+                            else
+                            {
+                                $explode =  explode('-',$post["identity_number"]);
+                                $dob = '19' . substr($explode[0], 0, 2) . '-' . substr($explode[0], 2, 2) . '-' . substr($explode[0], 4, 2);
+                            }
+                        }
 			
 			if(isset($post['id']) && $post['id'] == '')
 			{
@@ -381,8 +390,8 @@ class Players_m extends CI_Model {
 			'value'=>isset($post['value']) && $post['value'] != '' ? $post['value'] :'',
 			'team_id'=>isset($post['team_id']) && $post['team_id'] != '' ? $post['team_id'] :'',
 			'jersey_number'=>isset($post['jersey_number']) && $post['jersey_number'] != '' ? $post['jersey_number'] :'',
-			'image_url'=>isset($post['image_url']) && $post['image_url'] != '' ? $post['image_url'] :'',
-			'availability'=>isset($post['availability']) && $post['availability'] != '' ? $post['availability'] :'',
+			'identity_number'=>isset($post['identity_number']) && $post['identity_number'] != '' ? $post['identity_number'] :'',
+                        'dob'=>$dob != '' ? $dob : '',    
 			'team'=>json_encode($team),
 			// 'create_by'=>$this->session->userdata('user_id'),
 			// 'create_date'=>date("Y-m-d H:i:s"),
@@ -752,13 +761,27 @@ class Players_m extends CI_Model {
                                         continue;
                                     }
                                     
-                                    if(!is_numeric($row[2])) //value not int for age
+                                    
+                                    if(!preg_match("/^\d{6}-\d{2}-\d{4}$/", trim($row[3]))) 
                                     {
-                                        $row['feedback'] = 'Age provided isnt numeric';
+                                         $response['result'] = false;
+                                         $response['message'] = "Player identity number format is incorrect, please fix field to proceed.";
+                                         $response['input'] = "identity_number"; 
+                                         $response['type'] = "input";
+
+                                         return $response;
+                                         
+                                        $row['feedback'] = 'Player identity number format is incorrect';
                                         $row['row'] = $countRow;
                                         $error[] = $row;
                                         continue;
-                                    }
+                                     }
+                                     else
+                                     {
+                                         $explode =  explode('-',$row[3]);
+                                         $dob = '19' . substr($explode[0], 0, 2) . '-' . substr($explode[0], 2, 2) . '-' . substr($explode[0], 4, 2);
+                                     }
+
                                     
                                     $feedback_array = array($desired_name,$value,$basic_position,$team_id,$row[4],$row[8]);
                                     $feedback_array['feedback'] = 'Data Uploaded Succesfully';
@@ -766,23 +789,14 @@ class Players_m extends CI_Model {
                                     
                                     $insert[] = $feedback_array;
                                     
-                                    if($row[3] != '')
-                                    {
-                                        $currentDate = new DateTime();
-
-                                        // Calculate the birthdate by subtracting the age from the current date
-                                        $birthdate = $currentDate->sub(new DateInterval("P" . $row[2] . "Y"));
-
-                                        // Format the birthdate as a string
-                                        $birthdateString = $birthdate->format("Y-m-d");
-                                    }
+                                   
 
                                     $db_player = array (
                                     'name'=>isset($desired_name) && $desired_name != '' ? $desired_name :'',
                                     'value'=>isset($value) && $value != '' ? $value :'',
                                     'position'=>isset($basic_position) && $basic_position != '' ? strtoupper($basic_position) :'',
                                     'team_id'=>isset($team_id) && $team_id != '' ? $team_id :'',
-                                    'dob'=>isset($birthdateString) && $birthdateString != '' ? $birthdateString :'',
+                                    'dob'=>isset($dob) && $dob != '' ? $dob :'',
                                     'identity_number'=>isset($row[3]) && $row[3] != '' ? $row[3] :'',
                                     'jersey_number'=>isset($row[4]) && $row[4] != '' ? $row[4] :'',
                                     'image_url'=>isset($row[8]) && $row[8] != '' ? $row[8] :'',
@@ -963,6 +977,9 @@ class Players_m extends CI_Model {
                 if($pos == 'FWD')
                     return 'ST';
                 
+                if($pos == 'CF')
+                    return 'ST';
+                
                 if($pos == 'ST/RW')
                     return 'ST';
                 
@@ -1007,5 +1024,73 @@ class Players_m extends CI_Model {
 			return $response;
 		}
 	}
+        
+        function player_match_history($player_id = NULL)
+        {
+            if($player_id != NULL)
+            {
+                $player_in_fixtures = $this->db->where('player_id',$player_id)->get('player_in_fixtures')->result();
+                
+                $row = array();
+                foreach($player_in_fixtures as $row_player_in_fixtures)
+                {
+                    $fixture = $this->db->where('id',$row_player_in_fixtures->fixture_id)->get('fixtures')->row();
+
+                    $home = $this->db->where('id',$fixture->home_team_id)->get('team')->row();
+                    $away = $this->db->where('id',$fixture->away_team_id)->get('team')->row();
+                    $season = $this->db->where('id',$fixture->season_id)->get('season')->row();
+                    $action = json_decode($row_player_in_fixtures->action);
+                    
+                    $score = 0;
+                    $assist = 0;
+                    $red = 0;
+                    $yellow = 0;
+                    $minutes = 0;
+                    
+                    foreach($action as $row_action)
+                    {
+                        if($row_action->name == 'suboff')
+                        {
+                            $minutes = $row_action->time;
+                        }
+                        
+                        if($row_action->name == 'score')
+                        {
+                            $score = $score++;
+                        }
+                        
+                        if($row_action->name == 'assist')
+                        {
+                            $assist = $assist++;
+                        }
+                        
+                        if($row_action->name == 'yellow')
+                        {
+                            $yellow = $yellow++;
+                        }
+                        
+                        if($row_action->name == 'red')
+                        {
+                            $red = $red++;
+                        }
+                    }
+                    
+                    $data_array = array(
+                        'fixture'=>$fixture,
+                        'home'=>$home,
+                        'away'=>$away,
+                        'season'=>$season,
+                        'action'=>array('score'=>$score,'assist'=>$assist,'yellow'=>$yellow,'red'=>$red,'minutes'=>$minutes),
+                    );
+                    
+                    $row[] = $data_array;
+                }
+                
+                return $row;
+            }
+            else {
+                return false;
+            }
+        }
 }
 ?>

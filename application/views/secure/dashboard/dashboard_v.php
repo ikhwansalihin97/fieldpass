@@ -21,10 +21,7 @@ $this->load->view('secure/m_header');
                                             <!--end::Svg Icon-->
                                     </span>
                             </div>
-                            <div class="alert-text">FieldPass is the brand name and the second Quad Data
-product, providing domestic football fantasy leagues for
-Malaysian fans. Using the same technology and
-gamification specialization.
+                            <div class="alert-text">Fieldpass is the brand name and the second product of quad data sdn bhd, providing data management solutions for managing campaign.
                             <!--<a class="font-weight-bold" href="https://fullcalendar.io/docs/v4" target="_blank">FullCalendar v4 Documentation</a>.-->
                             <br />
                             <span class="label label-danger label-inline font-weight-bold">FIELDPASS</span></div>

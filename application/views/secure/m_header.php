@@ -17,7 +17,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		<meta charset="utf-8" />
 		<title><?php echo isset($title) && $title != '' ? $title : 'Liga Kita';?></title>
 		<meta name="description" content="Page with empty content" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<meta name="viewport" content="width=devi   ce-width, initial-scale=1, shrink-to-fit=no" />
 		<link rel="canonical" href="https://keenthemes.com/metronic" />
 		<!--begin::Fonts-->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
@@ -144,11 +144,14 @@ License: You must have a valid license purchased only from themeforest(the above
 										<i class="menu-icon flaticon-home"></i>
 										<span class="menu-text">Dashboard</span>
 									</a>
-								</li> 
+								</li>
+                                                                
+                                                                <!--
 								<li class="menu-section">
 									<h4 class="menu-text">Organisation Management</h4>
 									<i class="menu-icon ki ki-bold-more-hor icon-md"></i>
 								</li>
+                                                                -->
 								
 								<li class="menu-section">
 									<h4 class="menu-text">Team Management</h4>
@@ -368,11 +371,12 @@ License: You must have a valid license purchased only from themeforest(the above
 										</ul>
 									</div>
 								</li>
+                                                                <!--
 								<li class="menu-section">
 									<h4 class="menu-text">Help & Guide</h4>
 									<i class="menu-icon ki ki-bold-more-hor icon-md"></i>
 								</li>
-								
+								-->
 							
 							</ul>
 							<!--end::Menu Nav-->

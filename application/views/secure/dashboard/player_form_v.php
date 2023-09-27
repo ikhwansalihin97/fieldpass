@@ -80,55 +80,43 @@ $this->load->view('secure/m_header');
                                                             <span class="form-text text-muted">Please enter player value</span>
                                                     </div>
                                                     <div class="col-lg-6">
-                                                            <label>Team:</label>
-                                                            <div class="input-group">
-                                                                    <select class="form-control" name="team_id"  id="team_id">
-                                                                            <option disabled selected >Choose team</option>
-                                                                                    <?php
-                                                                                            if(isset($team) && is_array($team) && sizeof($team) > 0)
-                                                                                            {
-                                                                                                    foreach($team as $tkey=>$tvalue)
-                                                                                                            echo isset($form_data['team_id']) && $form_data['team_id'] == $tvalue->id ? '<option value="'.$tvalue->id.'" selected >' . $tvalue->name . '</option>' : '<option value="'.$tvalue->id.'" >' . $tvalue->name . '</option>';
-                                                                                            }
-                                                                                    ?>
-                                                                    </select>
-                                                                    <div class="input-group-append"><span class="input-group-text"><i class="fas fa-users"></i></span></div>
-                                                            </div>
-                                                            <span class="form-text text-muted">Please select player team</span>
-                                                    </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                    <div class="col-lg-6">
-                                                            <label>Jersey Number:</label>
-                                                            <div class="input-group">
-                                                                    <input type="text" class="form-control" placeholder="Enter jersey number" name="jersey_number" value="<?php echo isset($form_data['jersey_number']) && $form_data['jersey_number'] != '' ? $form_data['jersey_number'] : '';?>" />
-                                                                    <div class="input-group-append"><span class="input-group-text"><i class="fas fa-tshirt"></i></span></div>
-                                                            </div>
-                                                            <span class="form-text text-muted">Please enter player jersey number</span>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                            <label>Player Image(URL):</label>
-                                                            <div class="input-group">
-                                                                    <input type="text" class="form-control" placeholder="Enter player image URL" name="image_url" value="<?php echo isset($form_data['image_url']) && $form_data['image_url'] != '' ? $form_data['image_url'] : '';?>" />
-                                                                    <div class="input-group-append"><span class="input-group-text"><i class="far fa-image"></i></span></div>
-                                                            </div>
-                                                            <span class="form-text text-muted">Please enter player image url</span>
+                                                        <label>Team:</label>
+                                                        <div class="input-group">
+                                                            <select class="form-control" name="team_id"  id="team_id">
+                                                                <option disabled selected >Choose team</option>
+                                                                <option value="" > NO CLUB </option>
+                                                                <?php
+                                                                if(isset($team) && is_array($team) && sizeof($team) > 0)
+                                                                {
+                                                                    foreach($team as $tkey=>$tvalue)
+                                                                        echo isset($form_data['team_id']) && $form_data['team_id'] == $tvalue->id ? '<option value="'.$tvalue->id.'" selected >' . $tvalue->name . '</option>' : '<option value="'.$tvalue->id.'" >' . $tvalue->name . '</option>';
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                            <div class="input-group-append"><span class="input-group-text"><i class="fas fa-users"></i></span></div>
+                                                        </div>
+                                                        <span class="form-text text-muted">Please select player team</span>
                                                     </div>
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col-lg-6">
-                                                    <label>Player Availability:</label>
+                                                    <label>Jersey Number:</label>
                                                     <div class="input-group">
-                                                        <select class="form-control" name="availability"  id="availability">
-                                                            <option disabled selected >Choose status</option>
-                                                            <option value="1" <?php echo isset($form_data['availability']) && $form_data['availability'] == '1' ? 'selected' : '';?> >Active</option>
-                                                            <option value="0" <?php echo isset($form_data['availability']) && $form_data['availability'] == '0' ? 'selected' : '';?> >Inactive</option>
-                                                        </select>
-                                                        <div class="input-group-append"><span class="input-group-text"><i class="fas fa-toggle-on"></i></span></div>
+                                                            <input type="text" class="form-control" placeholder="Enter jersey number" name="jersey_number" value="<?php echo isset($form_data['jersey_number']) && $form_data['jersey_number'] != '' ? $form_data['jersey_number'] : '';?>" />
+                                                            <div class="input-group-append"><span class="input-group-text"><i class="fas fa-tshirt"></i></span></div>
                                                     </div>
-                                                    <span class="form-text text-muted">Please select player availability</span>
+                                                    <span class="form-text text-muted">Please enter player jersey number</span>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label>Identification Card:</label>
+                                                    <div class="input-group">
+                                                            <input type="text" class="form-control" placeholder="Enter Identification Card Number" name="identity_number" value="<?php echo isset($form_data['identity_number']) && $form_data['identity_number'] != '' ? $form_data['identity_number'] : '';?>" />
+                                                            <div class="input-group-append"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
+                                                    </div>
+                                                    <span class="form-text text-muted">Please enter player identity number eg: 971109-10-5774</span>
                                                 </div>
                                             </div>
+                                           
                                         </div>
 					<div class="card-footer">
 						<div class="d-flex justify-content-between">
@@ -144,280 +132,167 @@ $this->load->view('secure/m_header');
 				<!--end::Form-->
 			</div>
 			<!--end::Card-->
-                        <!--begin::Card-->
-                        <div class="card card-custom gutter-b">
-                                <div class="card-body">
-                                        <!--begin::Top-->
-                                        <div class="d-flex">
-                                                <!--begin::Pic-->
-                                                <div class="flex-shrink-0 mr-7">
-                                                        <div class="symbol symbol-50 symbol-lg-120">
-                                                                <img alt="Pic" src="<?php echo base_url();?>template/metronic/dist/assets/media//project-logos/2.png" />
-                                                        </div>
-                                                </div>
-                                                <!--end::Pic-->
-                                                <!--begin: Info-->
-                                                <div class="flex-grow-1">
-                                                        <!--begin::Title-->
-                                                        <div class="d-flex align-items-center justify-content-between flex-wrap mt-2">
-                                                                <!--begin::User-->
-                                                                <div class="mr-3">
-                                                                        <!--begin::Name-->
-                                                                        <a href="#" class="d-flex align-items-center text-dark text-hover-primary font-size-h5 font-weight-bold mr-3">Kelana United VS Bandar Putera 2 FC 
-                                                                        <i class="flaticon2-correct text-success icon-md ml-2"></i></a>
-                                                                        <!--end::Name-->
-                                                                        <!--begin::Contacts-->
-                                                                        <div class="d-flex flex-wrap my-2">
-                                                                                <a href="#" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-                                                                                <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-                                                                                        <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Puzzle.svg-->
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                                                                <rect x="0" y="0" width="24" height="24"/>
-                                                                                                <path d="M19,11 L20,11 C21.6568542,11 23,12.3431458 23,14 C23,15.6568542 21.6568542,17 20,17 L19,17 L19,20 C19,21.1045695 18.1045695,22 17,22 L5,22 C3.8954305,22 3,21.1045695 3,20 L3,17 L5,17 C6.65685425,17 8,15.6568542 8,14 C8,12.3431458 6.65685425,11 5,11 L3,11 L3,8 C3,6.8954305 3.8954305,6 5,6 L8,6 L8,5 C8,3.34314575 9.34314575,2 11,2 C12.6568542,2 14,3.34314575 14,5 L14,6 L17,6 C18.1045695,6 19,6.8954305 19,8 L19,11 Z" fill="#000000" opacity="0.3"/>
-                                                                                            </g>
-                                                                                        </svg>
-                                                                                        <!--end::Svg Icon-->
-                                                                                </span>Season 6</a>
-                                                                                <a href="#" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-                                                                                <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-                                                                                        <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Git1.svg-->
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                                                                <rect x="0" y="0" width="24" height="24"/>
-                                                                                                <rect fill="#000000" opacity="0.3" x="11" y="8" width="2" height="9" rx="1"/>
-                                                                                                <path d="M12,21 C13.1045695,21 14,20.1045695 14,19 C14,17.8954305 13.1045695,17 12,17 C10.8954305,17 10,17.8954305 10,19 C10,20.1045695 10.8954305,21 12,21 Z M12,23 C9.790861,23 8,21.209139 8,19 C8,16.790861 9.790861,15 12,15 C14.209139,15 16,16.790861 16,19 C16,21.209139 14.209139,23 12,23 Z" fill="#000000" fill-rule="nonzero"/>
-                                                                                                <path d="M12,7 C13.1045695,7 14,6.1045695 14,5 C14,3.8954305 13.1045695,3 12,3 C10.8954305,3 10,3.8954305 10,5 C10,6.1045695 10.8954305,7 12,7 Z M12,9 C9.790861,9 8,7.209139 8,5 C8,2.790861 9.790861,1 12,1 C14.209139,1 16,2.790861 16,5 C16,7.209139 14.209139,9 12,9 Z" fill="#000000" fill-rule="nonzero"/>
-                                                                                            </g>
-                                                                                        </svg>
-                                                                                        <!--end::Svg Icon-->
-                                                                                </span>Matchweek 2</a>
-                                                                                <a href="#" class="text-muted text-hover-primary font-weight-bold">
-                                                                                <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-                                                                                        <!--begin::Svg Icon | path:assets/media/svg/icons/Map/Marker2.svg-->
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                                                                        <rect x="0" y="0" width="24" height="24" />
-                                                                                                        <path d="M9.82829464,16.6565893 C7.02541569,15.7427556 5,13.1079084 5,10 C5,6.13400675 8.13400675,3 12,3 C15.8659932,3 19,6.13400675 19,10 C19,13.1079084 16.9745843,15.7427556 14.1717054,16.6565893 L12,21 L9.82829464,16.6565893 Z M12,12 C13.1045695,12 14,11.1045695 14,10 C14,8.8954305 13.1045695,8 12,8 C10.8954305,8 10,8.8954305 10,10 C10,11.1045695 10.8954305,12 12,12 Z" fill="#000000" />
-                                                                                                </g>
-                                                                                        </svg>
-                                                                                        <!--end::Svg Icon-->
-                                                                                </span>Eco Ardence Setia Alam</a>
-                                                                        </div>
-                                                                        <!--end::Contacts-->
-                                                                </div>
-                                                                <!--begin::User-->
-                                                                
-                                                        </div>
-                                                        <!--end::Title-->
-                                                        <!--begin::Content-->
-                                                        <div class="d-flex align-items-center flex-wrap justify-content-between">
-                                                                <!--begin::Description-->
-                                                                <div class="flex-grow-1 font-weight-bold text-dark-50 py-2 py-lg-2 mr-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
-                                                                <!--end::Description-->
-                                                                
-                                                        </div>
-                                                        <!--end::Content-->
-                                                </div>
-                                                <!--end::Info-->
-                                        </div>
-                                        <!--end::Top-->
-                                        <!--begin::Separator-->
-                                        <div class="separator separator-solid my-7"></div>
-                                        <!--end::Separator-->
-                                        <!--begin::Bottom-->
-                                        <div class="d-flex align-items-center flex-wrap">
-                                                <!--begin: Item-->
-                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                                                        <span class="mr-4">
-                                                                <i class="flaticon-network icon-2x text-muted font-weight-bold"></i>
-                                                        </span>
-                                                        <div class="d-flex flex-column text-dark-75">
-                                                                <span class="font-weight-bolder font-size-sm">Position</span>
-                                                                <span class=" font-weight-bold font-size-h5">Striker</span>
-                                                        </div>
-                                                </div>
-                                                <!--end: Item-->
-                                                <!--begin: Item-->
-                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                                                        <span class="mr-4">
-                                                                <i class="flaticon2-hourglass-1 icon-2x text-muted font-weight-bold"></i>
-                                                        </span>
-                                                        <div class="d-flex flex-column text-dark-75">
-                                                                <span class="font-weight-bolder font-size-sm">Minutes Played</span>
-                                                                <span class="font-size-h5 font-weight-bold">72 min</span>
-                                                        </div>
-                                                </div>
-                                                <!--end: Item-->
-                                                <!--begin: Item-->
-                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                                                        <span class="mr-4">
-                                                                <i class="flaticon-pie-chart icon-2x text-muted font-weight-bold"></i>
-                                                        </span>
-                                                        <div class="d-flex flex-column text-dark-75">
-                                                                <span class="font-weight-bolder font-size-sm">Shots</span>
-                                                                <span class="font-weight-bold font-size-h5">4</span>
-                                                        </div>
-                                                </div>
-                                                <!--end: Item-->
-                                                <!--begin: Item-->
-                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                                                        <span class="mr-4">
-                                                                <i class="flaticon-file-2 icon-2x text-muted font-weight-bold"></i>
-                                                        </span>
-                                                         <div class="d-flex flex-column text-dark-75">
-                                                                <span class="font-weight-bolder font-size-sm">Cards</span>
-                                                                <span class="font-weight-bold font-size-h5">None</span>
-                                                        </div>
-                                                </div>
-                                                <!--end: Item-->
-                                                <!--begin: Item-->
-                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                                                        <span class="mr-4">
-                                                                <i class="flaticon-chat-1 icon-2x text-muted font-weight-bold"></i>
-                                                        </span>
-                                                         <div class="d-flex flex-column text-dark-75">
-                                                                <span class="font-weight-bolder font-size-sm">Fouls</span>
-                                                                <span class="font-weight-bolder font-size-h5">2</span>
-                                                        </div>
-                                                </div>
-                                                <!--end: Item-->
-                                        </div>
-                                        <!--end::Bottom-->
-                                </div>
-                        </div>
-                        <!--end::Card-->
                         
-                        <!--begin::Card-->
-                        <div class="card card-custom gutter-b">
-                                <div class="card-body">
-                                        <!--begin::Top-->
-                                        <div class="d-flex">
-                                               
-                                                <!--begin: Info-->
-                                                <div class="flex-grow-1">
-                                                        <!--begin::Title-->
-                                                        <div class="d-flex align-items-center justify-content-between flex-wrap mt-2">
-                                                                <!--begin::User-->
-                                                                <div class="mr-3">
-                                                                        <!--begin::Name-->
-                                                                        <a href="#" class="d-flex align-items-center text-dark text-hover-primary font-size-h5 font-weight-bold mr-3">Kelana United VS KRU FC 
-                                                                        <i class="flaticon2-correct text-success icon-md ml-2"></i></a>
-                                                                        <!--end::Name-->
-                                                                        <!--begin::Contacts-->
-                                                                        <div class="d-flex flex-wrap my-2">
-                                                                                <a href="#" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-                                                                                <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-                                                                                        <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Puzzle.svg-->
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                                                                <rect x="0" y="0" width="24" height="24"/>
-                                                                                                <path d="M19,11 L20,11 C21.6568542,11 23,12.3431458 23,14 C23,15.6568542 21.6568542,17 20,17 L19,17 L19,20 C19,21.1045695 18.1045695,22 17,22 L5,22 C3.8954305,22 3,21.1045695 3,20 L3,17 L5,17 C6.65685425,17 8,15.6568542 8,14 C8,12.3431458 6.65685425,11 5,11 L3,11 L3,8 C3,6.8954305 3.8954305,6 5,6 L8,6 L8,5 C8,3.34314575 9.34314575,2 11,2 C12.6568542,2 14,3.34314575 14,5 L14,6 L17,6 C18.1045695,6 19,6.8954305 19,8 L19,11 Z" fill="#000000" opacity="0.3"/>
-                                                                                            </g>
-                                                                                        </svg>
-                                                                                        <!--end::Svg Icon-->
-                                                                                </span>Season 6</a>
-                                                                                <a href="#" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-                                                                                <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-                                                                                        <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Git1.svg-->
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                                                                <rect x="0" y="0" width="24" height="24"/>
-                                                                                                <rect fill="#000000" opacity="0.3" x="11" y="8" width="2" height="9" rx="1"/>
-                                                                                                <path d="M12,21 C13.1045695,21 14,20.1045695 14,19 C14,17.8954305 13.1045695,17 12,17 C10.8954305,17 10,17.8954305 10,19 C10,20.1045695 10.8954305,21 12,21 Z M12,23 C9.790861,23 8,21.209139 8,19 C8,16.790861 9.790861,15 12,15 C14.209139,15 16,16.790861 16,19 C16,21.209139 14.209139,23 12,23 Z" fill="#000000" fill-rule="nonzero"/>
-                                                                                                <path d="M12,7 C13.1045695,7 14,6.1045695 14,5 C14,3.8954305 13.1045695,3 12,3 C10.8954305,3 10,3.8954305 10,5 C10,6.1045695 10.8954305,7 12,7 Z M12,9 C9.790861,9 8,7.209139 8,5 C8,2.790861 9.790861,1 12,1 C14.209139,1 16,2.790861 16,5 C16,7.209139 14.209139,9 12,9 Z" fill="#000000" fill-rule="nonzero"/>
-                                                                                            </g>
-                                                                                        </svg>
-                                                                                        <!--end::Svg Icon-->
-                                                                                </span>Matchweek 2</a>
-                                                                                <a href="#" class="text-muted text-hover-primary font-weight-bold">
-                                                                                <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-                                                                                        <!--begin::Svg Icon | path:assets/media/svg/icons/Map/Marker2.svg-->
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                        <?php
+                        if(isset($match_history) && is_array($match_history) && sizeof($match_history) > 0){
+                            foreach($match_history as $row_match_history)
+                            {
+                                
+                                $match_url = $row_match_history['fixture']->id != '' ? base_url() . 'secure/update_match/' . encrypt_data($row_match_history['fixture']->id) : '#';
+                                $home_name = $row_match_history['home']->name . ' (' . $row_match_history['fixture']->home_team_score . ')';
+                                $away_name = '(' . $row_match_history['fixture']->away_team_score . ') ' . $row_match_history['away']->name;
+                                $season = $row_match_history['season']->name != '' ? $row_match_history['season']->name : date('Y');
+                                $match_week = $row_match_history['fixture']->matchweek != '' ? $row_match_history['fixture']->matchweek : 'Not Specified';
+                                $score = $row_match_history['action']['score'] != '' ? $row_match_history['action']['score'] : '0';
+                                $assist = $row_match_history['action']['assist'] != '' ? $row_match_history['action']['assist'] : '0';
+                                $yellow = $row_match_history['action']['yellow'] != '' ? $row_match_history['action']['yellow'] : 'None';
+                                $red = $row_match_history['action']['red'] != '' ? $row_match_history['action']['score'] : 'None';
+                                $minutes = $row_match_history['action']['minutes'] != '' ? $row_match_history['action']['minutes'] : '0';
+                                //ad($row_match_history);
+                        ?>
+                            <!--begin::Card-->
+                            <div class="card card-custom gutter-b ">
+                                    <div class="card-body">
+                                            <!--begin::Top-->
+                                            <div class="d-flex">
+
+                                                    <!--begin: Info-->
+                                                    <div class="flex-grow-1">
+                                                            <!--begin::Title-->
+                                                            <div class="d-flex align-items-center justify-content-between flex-wrap mt-2">
+                                                                    <!--begin::User-->
+                                                                    <div class="mr-3">
+                                                                            <!--begin::Name-->
+                                                                            <a href="<?php echo isset($match_url) && $match_url != '' ? $match_url : '#';?>" class="d-flex align-items-center text-dark text-hover-primary font-size-h5 font-weight-bold mr-3" target="_blank">
+                                                                                <?php echo isset($home_name) && $home_name != '' ? $home_name : '';?>
+                                                                                VS 
+                                                                                <?php echo isset($away_name) && $away_name != '' ? $away_name : '';?> 
+                                                                                <i class="flaticon2-correct text-success icon-md ml-2"></i>
+                                                                            </a>
+                                                                            <!--end::Name-->
+                                                                            <!--begin::Contacts-->
+                                                                            <div class="d-flex flex-wrap my-2">
+                                                                                    <a href="<?php echo isset($match_url) && $match_url != '' ? $match_url : '#';?>" target="_blank" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                                                                    <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
+                                                                                            <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Puzzle.svg-->
+                                                                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                                                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                                                                        <rect x="0" y="0" width="24" height="24" />
-                                                                                                        <path d="M9.82829464,16.6565893 C7.02541569,15.7427556 5,13.1079084 5,10 C5,6.13400675 8.13400675,3 12,3 C15.8659932,3 19,6.13400675 19,10 C19,13.1079084 16.9745843,15.7427556 14.1717054,16.6565893 L12,21 L9.82829464,16.6565893 Z M12,12 C13.1045695,12 14,11.1045695 14,10 C14,8.8954305 13.1045695,8 12,8 C10.8954305,8 10,8.8954305 10,10 C10,11.1045695 10.8954305,12 12,12 Z" fill="#000000" />
+                                                                                                    <rect x="0" y="0" width="24" height="24"/>
+                                                                                                    <path d="M19,11 L20,11 C21.6568542,11 23,12.3431458 23,14 C23,15.6568542 21.6568542,17 20,17 L19,17 L19,20 C19,21.1045695 18.1045695,22 17,22 L5,22 C3.8954305,22 3,21.1045695 3,20 L3,17 L5,17 C6.65685425,17 8,15.6568542 8,14 C8,12.3431458 6.65685425,11 5,11 L3,11 L3,8 C3,6.8954305 3.8954305,6 5,6 L8,6 L8,5 C8,3.34314575 9.34314575,2 11,2 C12.6568542,2 14,3.34314575 14,5 L14,6 L17,6 C18.1045695,6 19,6.8954305 19,8 L19,11 Z" fill="#000000" opacity="0.3"/>
                                                                                                 </g>
-                                                                                        </svg>
-                                                                                        <!--end::Svg Icon-->
-                                                                                </span>Eco Ardence Setia Alam</a>
-                                                                        </div>
-                                                                        <!--end::Contacts-->
-                                                                </div>
-                                                                <!--begin::User-->
-                                                                
-                                                        </div>
-                                                        <!--end::Title-->
-                                                        
-                                                </div>
-                                                <!--end::Info-->
-                                        </div>
-                                        <!--end::Top-->
-                                        <!--begin::Separator-->
-                                        <div class="separator separator-solid my-7"></div>
-                                        <!--end::Separator-->
-                                        <!--begin::Bottom-->
-                                        <div class="d-flex align-items-center flex-wrap">
-                                                <!--begin: Item-->
-                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                                                        <span class="mr-4">
-                                                                <i class="flaticon-network icon-2x text-muted font-weight-bold"></i>
-                                                        </span>
-                                                        <div class="d-flex flex-column text-dark-75">
-                                                                <span class="font-weight-bolder font-size-sm">Position</span>
-                                                                <span class=" font-weight-bold font-size-h5">Striker</span>
-                                                        </div>
-                                                </div>
-                                                <!--end: Item-->
-                                                <!--begin: Item-->
-                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                                                        <span class="mr-4">
-                                                                <i class="flaticon2-hourglass-1 icon-2x text-muted font-weight-bold"></i>
-                                                        </span>
-                                                        <div class="d-flex flex-column text-dark-75">
-                                                                <span class="font-weight-bolder font-size-sm">Minutes Played</span>
-                                                                <span class="font-size-h5 font-weight-bold">72 min</span>
-                                                        </div>
-                                                </div>
-                                                <!--end: Item-->
-                                                <!--begin: Item-->
-                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                                                        <span class="mr-4">
-                                                                <i class="flaticon-pie-chart icon-2x text-muted font-weight-bold"></i>
-                                                        </span>
-                                                        <div class="d-flex flex-column text-dark-75">
-                                                                <span class="font-weight-bolder font-size-sm">Shots</span>
-                                                                <span class="font-weight-bold font-size-h5">4</span>
-                                                        </div>
-                                                </div>
-                                                <!--end: Item-->
-                                                <!--begin: Item-->
-                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                                                        <span class="mr-4">
-                                                                <i class="flaticon-file-2 icon-2x text-muted font-weight-bold"></i>
-                                                        </span>
-                                                         <div class="d-flex flex-column text-dark-75">
-                                                                <span class="font-weight-bolder font-size-sm">Cards</span>
-                                                                <span class="font-weight-bold font-size-h5">None</span>
-                                                        </div>
-                                                </div>
-                                                <!--end: Item-->
-                                                <!--begin: Item-->
-                                                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                                                        <span class="mr-4">
-                                                                <i class="flaticon-chat-1 icon-2x text-muted font-weight-bold"></i>
-                                                        </span>
-                                                         <div class="d-flex flex-column text-dark-75">
-                                                                <span class="font-weight-bolder font-size-sm">Fouls</span>
-                                                                <span class="font-weight-bolder font-size-h5">2</span>
-                                                        </div>
-                                                </div>
-                                                <!--end: Item-->
-                                        </div>
-                                        <!--end::Bottom-->
-                                </div>
-                        </div>
-                        <!--end::Card-->
+                                                                                            </svg>
+                                                                                            <!--end::Svg Icon-->
+                                                                                    </span>Season <?php echo isset($season) && $season != '' ? $season : date('Y');?></a>
+                                                                                    <a href="<?php echo isset($match_url) && $match_url != '' ? $match_url : '#';?>" target="_blank" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                                                                    <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
+                                                                                            <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Git1.svg-->
+                                                                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                                                                    <rect x="0" y="0" width="24" height="24"/>
+                                                                                                    <rect fill="#000000" opacity="0.3" x="11" y="8" width="2" height="9" rx="1"/>
+                                                                                                    <path d="M12,21 C13.1045695,21 14,20.1045695 14,19 C14,17.8954305 13.1045695,17 12,17 C10.8954305,17 10,17.8954305 10,19 C10,20.1045695 10.8954305,21 12,21 Z M12,23 C9.790861,23 8,21.209139 8,19 C8,16.790861 9.790861,15 12,15 C14.209139,15 16,16.790861 16,19 C16,21.209139 14.209139,23 12,23 Z" fill="#000000" fill-rule="nonzero"/>
+                                                                                                    <path d="M12,7 C13.1045695,7 14,6.1045695 14,5 C14,3.8954305 13.1045695,3 12,3 C10.8954305,3 10,3.8954305 10,5 C10,6.1045695 10.8954305,7 12,7 Z M12,9 C9.790861,9 8,7.209139 8,5 C8,2.790861 9.790861,1 12,1 C14.209139,1 16,2.790861 16,5 C16,7.209139 14.209139,9 12,9 Z" fill="#000000" fill-rule="nonzero"/>
+                                                                                                </g>
+                                                                                            </svg>
+                                                                                            <!--end::Svg Icon-->
+                                                                                    </span>Matchweek <?php echo isset($match_week) && $match_week != '' ? $match_week : '';?></a>
+
+                                                                            </div>
+                                                                            <!--end::Contacts-->
+                                                                    </div>
+                                                                    <!--begin::User-->
+
+                                                            </div>
+                                                            <!--end::Title-->
+
+                                                    </div>
+                                                    <!--end::Info-->
+                                            </div>
+                                            <!--end::Top-->
+                                            <!--begin::Separator-->
+                                            <div class="separator separator-solid my-7"></div>
+                                            <!--end::Separator-->
+                                            <!--begin::Bottom-->
+                                            <div class="d-flex align-items-center flex-wrap">
+                                                    <!--begin: Item-->
+                                                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                                                            <span class="mr-4">
+                                                                    <i class="flaticon-confetti icon-2x text-success font-weight-bold"></i>
+                                                            </span>
+                                                            <div class="d-flex flex-column text-dark-75">
+                                                                    <span class="font-weight-bolder font-size-sm">Score</span>
+                                                                    <span class=" font-weight-bold font-size-h5"><?php echo isset($score) && $score != '' ? $score : '0';?></span>
+                                                            </div>
+                                                    </div>
+                                                    <!--end: Item-->
+                                                     <!--begin: Item-->
+                                                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                                                            <span class="mr-4">
+                                                                    <i class="flaticon-customer icon-2x text-info font-weight-bold"></i>
+                                                            </span>
+                                                            <div class="d-flex flex-column text-dark-75">
+                                                                    <span class="font-weight-bolder font-size-sm">Assist</span>
+                                                                    <span class="font-weight-bold font-size-h5"><?php echo isset($assist) && $assist != '' ? $assist : '0';?></span>
+                                                            </div>
+                                                    </div>
+                                                    <!--end: Item-->
+                                                    <!--begin: Item-->
+                                                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                                                            <span class="mr-4">
+                                                                    <i class="flaticon-stopwatch icon-2x text-primary font-weight-bold"></i>
+                                                            </span>
+                                                            <div class="d-flex flex-column text-dark-75">
+                                                                    <span class="font-weight-bolder font-size-sm">Minutes Played</span>
+                                                                    <span class="font-size-h5 font-weight-bold"><?php echo isset($minutes) && $minutes != '' ? $minutes : '0';?> min</span>
+                                                            </div>
+                                                    </div>
+                                                    <!--end: Item-->
+                                                   <!--begin: Item-->
+                                                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                                                            <span class="mr-4">
+                                                                    <i class="flaticon-edit-1 icon-2x text-danger font-weight-bold"></i>
+                                                            </span>
+                                                             <div class="d-flex flex-column text-dark-75">
+                                                                    <span class="font-weight-bolder font-size-sm">Red</span>
+                                                                    <span class="font-weight-bold font-size-h5"><?php echo isset($red) && $red != '' ? $red : '0';?></span>
+                                                            </div>
+                                                    </div>
+                                                    <!--end: Item-->
+                                                   <!--begin: Item-->
+                                                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                                                            <span class="mr-4">
+                                                                    <i class="flaticon-file-2 icon-2x text-warning font-weight-bold"></i>
+                                                            </span>
+                                                             <div class="d-flex flex-column text-dark-75">
+                                                                    <span class="font-weight-bolder font-size-sm">Yellow</span>
+                                                                    <span class="font-weight-bold font-size-h5"><?php echo isset($yellow) && $yellow != '' ? $yellow : '0';?></span>
+                                                            </div>
+                                                    </div>
+                                                    <!--end: Item-->
+                                                    <!--begin: Item-->
+                                                    <!--
+                                                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                                                            <span class="mr-4">
+                                                                    <i class="flaticon-information icon-2x text-secondary font-weight-bold"></i>
+                                                            </span>
+                                                             <div class="d-flex flex-column text-dark-75">
+                                                                    <span class="font-weight-bolder font-size-sm">Result</span>
+                                                                    <span class="font-weight-bold font-size-h5">Win</span>
+                                                            </div>
+                                                    </div>
+                                                    -->
+                                                    <!--end: Item-->
+                                            </div>
+                                            <!--end::Bottom-->
+                                    </div>
+                            </div>
+                            <!--end::Card-->
+                        
+                        <?php
+                            }
+                        }
+                        ?>
+                        
                         
                         
 		</div>

@@ -163,7 +163,7 @@ $this->load->view('secure/m_header');
                                                                                                                 {
                                                                                                                 ?>
                                                                                                                     <div class="symbol symbol-50 symbol-lg-120">
-                                                                                                                        <img alt="Pic" src="<?php echo $val['away_image'];?>"/>
+                                                                                                                        <img alt="Pic" src="<?php echo $val['home_image'];?>"/>
                                                                                                                     </div>
                                                                                                                 <?php
                                                                                                                 }
