@@ -989,7 +989,7 @@ class CI_Upload {
 	 * @return	bool
 	 */
 	public function validate_upload_path()
-	{                                                print_r($this->upload_path);die;
+	{                                            
 
 		if ($this->upload_path === '')
 		{
