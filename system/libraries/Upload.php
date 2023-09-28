@@ -396,7 +396,6 @@ class CI_Upload {
 			}
 
 		}
-                                                print_r($_file);die;
 
 		if ( ! isset($_file))
 		{
