@@ -437,7 +437,7 @@ class Players_m extends CI_Model {
 			}
                         else 
                         {  
-                        
+                        print_r($files);die;
                             if(isset($files) && sizeof($files) > 0)
                             {
                                 $rs = $this->user_image_upload($files, $player_id, $player->team_id);
