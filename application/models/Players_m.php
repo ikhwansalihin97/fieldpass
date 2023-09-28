@@ -487,6 +487,8 @@ class Players_m extends CI_Model {
             $this->load->library('upload', $config);
 
         if (!$this->upload->do_upload("profile_avatar",$player_id)) {
+                                                print_r($player_id);die;
+
             $upload_error = $this->upload->display_errors();
             return array('result' => false, 'msg' => $upload_error);
         } else {
@@ -494,7 +496,6 @@ class Players_m extends CI_Model {
                 
                 $sql = "SELECT * FROM `player` WHERE `id` = " . $this->db->escape($player_id) . " LIMIT 1";
                 $query = $this->db->query($sql);
-                                    print_r($player_id);die;
 
                 if(isset($query) && $query->num_rows() > 0)
                 {
