@@ -494,12 +494,12 @@ class Players_m extends CI_Model {
                 
                 $sql = "SELECT * FROM `player` WHERE `id` = " . $this->db->escape($player_id) . " LIMIT 1";
                 $query = $this->db->query($sql);
+                                    print_r($player_id);die;
 
                 if(isset($query) && $query->num_rows() > 0)
                 {
                     $image_data = $query->row();
                     $image_data = str_replace('https://'.$_SERVER['SERVER_NAME'], '', $image_data);
-                                    print_r($image_data);die;
 
                     if($image_data->image_url != "")
                     {
