@@ -473,11 +473,12 @@ class Players_m extends CI_Model {
         if (!is_dir("uploads"))
             mkdir("uploads", 0777, TRUE);
 
-            if(!is_dir("uploads/player/".$team_id))
-            mkdir("uploads/player/".$team_id, 0777, TRUE);
 
         if (!is_dir("uploads/player/"))
             mkdir("uploads/player/", 0777, TRUE);
+        
+            if(!is_dir("uploads/player/".$team_id))
+            mkdir("uploads/player/".$team_id, 0777, TRUE);
 
         $config['upload_path'] = "uploads/player/".$team_id;
         $config['allowed_types'] = 'jpg|jpeg|png|gif';
