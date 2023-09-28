@@ -685,6 +685,16 @@ class Players_m extends CI_Model {
                                     //first try to change full name to short name
                                     $desired_name = $this->short_name($row[1]);
 
+                                     $basic_pos = array("GK", "DF", "MF", "ST");
+                                        if(!in_array(trim($row[5]),$basic_pos))
+                                        {
+                                             $response['result'] = false;
+                                            $response['message'] = "Invalid Position: ".trim($row[5]);
+                                            $response['input'] = "position"; 
+                                            $response['type'] = "input";
+
+                                            return $response;
+                                        }
                                     $basic_position = $this->basic_position(trim($row[5]));
                                     
                                     $value = $row[6] * 10;
@@ -697,6 +707,13 @@ class Players_m extends CI_Model {
                                     
                                     if($query->num_rows() == 0)//team id not found
                                     {
+                                            $response['result'] = false;
+                                         $response['message'] = "Team not found: ".$this->db->escape($row[7]);
+                                         $response['input'] = "team_id"; 
+                                         $response['type'] = "input";
+
+                                         return $response;
+                                         
                                             //insert the team
                                             $team_name = explode(' ',$row[7]);
                                             
