@@ -437,7 +437,6 @@ class Players_m extends CI_Model {
 			}
                         else 
                         {  
-                        print_r($files);die;
                             if(isset($files) && sizeof($files) > 0)
                             {
                                 $rs = $this->user_image_upload($files, $player_id, $player->team_id);
@@ -480,9 +479,11 @@ class Players_m extends CI_Model {
             if(!is_dir("uploads/player/".$team_id))
             mkdir("uploads/player/".$team_id, 0777, TRUE);
 
+
         $config['upload_path'] = "uploads/player/".$team_id;
         $config['allowed_types'] = 'jpg|jpeg|png|gif';
         $config['max_size'] = '0';
+                                    print_r($config);die;
 
             $this->load->library('upload', $config);
 
