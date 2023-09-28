@@ -6,12 +6,70 @@ class Players_m extends CI_Model {
         parent::__construct();
     }
 
-    function player_listing($search_data = array()) {
-        $data["menu"] = "Players";
-        $data["menu_item"] = "player_listing";
-        $data['title'] = 'Player Listing';
-        $data['card_title'] = '<span class="card-icon"><i class="fas fa-user"></i></span><h3 class="card-label"> Player Listing <small>available players</small></h3>';
-        $data['breadcrumbs'] = array('Players' => 'secure/listing/player');
+		$data['pagination'] = $this->pagination->create_links();
+		$data['num_per_page'] = $config['per_page'];
+		
+		$limit = ' LIMIT 0, ' . $config['per_page'];
+		
+		if($data['total_rows'] > 0) {
+                    if($this->uri->segment($config['uri_segment']) AND is_numeric($this->uri->segment($config['uri_segment'])))
+                    {
+                        $limit = ' LIMIT ' . $this->uri->segment($config['uri_segment']) . ', ' . $config['per_page'];
+                    }
+                    else
+                    {
+                        $limit = ' LIMIT 0, ' . $config['per_page'];
+                    }
+		}
+		
+		if($is_download === true)
+		{
+			$sql_query = "SELECT `player`.`id`,`player`.`name`,`player`.`value`,`player`.`team`,`player`.`jersey_number`,`player`.`position`,`player`.`team_id`,`team`.`name` as `team_name` FROM `player` LEFT JOIN `team` ON `player`.`team_id` = `team`.`id` " . $where ;
+		}
+		else
+		{
+			$sql_query = "SELECT `player`.`id`,`player`.`name`,`player`.`value`,`player`.`team`,`player`.`jersey_number`,`player`.`position`,`player`.`team_id`,`team`.`name` as `team_name` FROM `player` LEFT JOIN `team` ON `player`.`team_id` = `team`.`id` " . $where . $limit ;
+		}
+		
+		// ad($sql_query);
+		// exit();
+		
+		$data['query'] = $this->db->query($sql_query);
+		
+		$result = $data['query']->result();
+		
+		// ad($result);
+		
+		// $player_ids = array_column($result, 'id');
+		
+		$rows = [];
+		
+		$data['team'] = $this->Team_m->get_team();
+		
+		if($this->uri->segment(5) == "")
+		{
+			$j = 1;
+			
+		}
+		else
+		{
+			$j = $this->uri->segment(5)+1;
+		}
+		
+		foreach($result as $i=>$res){
+			
+			if($res->id != '')
+			{
+				$name = '<input class="form-control quickName" type="text" name="name" value="'.ucwords(strtolower($res->name)).'" id="'.$res->id.'">';
+			}
+			
+			$position = '<select class="form-control quickPosition" name="position"  id="'.$res->id.'"><option disabled selected >Choose position</option>';
+			$position .= isset($res->position) && $res->position == 'GK' ? '<option value="GK" selected > GK </option>' : '<option value="GK"> GK </option>' ;							
+			$position .= isset($res->position) && $res->position == 'DF' ? '<option value="DF" selected > DF </option>' : '<option value="DF"> DF </option>' ;							
+			$position .= isset($res->position) && $res->position == 'MF' ? '<option value="MF" selected > MF </option>' : '<option value="MF"> MF </option>' ;							
+			$position .= isset($res->position) && $res->position == 'ST' ? '<option value="ST" selected > ST </option>' : '<option value="ST"> ST </option>' ;							
+			$position .='</select>';
+			
 
         $is_download = (isset($search_data['download']) && $search_data['download'] == 'true');
 
@@ -564,336 +622,263 @@ class Players_m extends CI_Model {
                 if ($row[1] == '' || $row[2] == '' || $row[3] == '' || $row[4] == '' || $row[5] == '' || $row[7] == '') {
                     $errorKey = array();
 
-                    for ($i = 0; $i <= 9; $i++) {
-                        if ($row[$i] == '') {
-                            $errorKey[] = $keyArray[$i];
+                                    
+                                    $feedback_array = array($desired_name,$value,$basic_position,$team_id,$row[4],$row[8]);
+                                    $feedback_array['feedback'] = 'Data Uploaded Succesfully';
+                                    $feedback_array['row'] = $countRow;
+                                    
+                                    $insert[] = $feedback_array;
+                                    
+                                   
+
+                                    $db_player = array (
+                                    'name'=>isset($desired_name) && $desired_name != '' ? $desired_name :'',
+                                    'value'=>isset($value) && $value != '' ? $value :'',
+                                    'position'=>isset($basic_position) && $basic_position != '' ? strtoupper($basic_position) :'',
+                                    'team_id'=>isset($team_id) && $team_id != '' ? $team_id :'',
+                                    'dob'=>isset($dob) && $dob != '' ? $dob :'',
+                                    'identity_number'=>isset($row[3]) && $row[3] != '' ? $row[3] :'',
+                                    'jersey_number'=>isset($row[4]) && $row[4] != '' ? $row[4] :'',
+                                    'image_url'=>isset($row[8]) && $row[8] != '' ? $row[8] :'',
+                                    'short_name'=>isset($row[9]) && $row[9] != '' ? $row[9] :'',
+                                    );
+
+                                    $insertBatch[] = $db_player;
+                                    
+					
+				}
+			}
+                        
+			if(!empty($insertBatch)) $this->db->insert_batch('player', $insertBatch);
+			
+			$returnArray['error'] = $error;
+			$returnArray['success'] = $insert;
+			
+			$arrayMerge = array_merge($insert,$error);
+			
+			$tableString = '';
+			foreach($arrayMerge as $mergeValue)
+			{
+				$feedbackColor = 'green';
+				
+				if($mergeValue['feedback'] != 'Data Uploaded Succesfully')
+				{
+					$feedbackColor = 'red';
+				}
+				
+				$tableString .= '<tr style="color:'.$feedbackColor.'"><td>' . $mergeValue['row'] . '</td><td> Name : ' . $mergeValue[0] . ', Value = ' . $mergeValue[1] . ', Position = ' . $mergeValue[2] . ', Team ID = ' . $mergeValue[3] . ', Jersey Number = ' . $mergeValue[4] . ', Image URL = ' . $mergeValue[5] . '</td><td>' . $mergeValue['feedback'] . '</td>';
+			}
+			
+			
+			return $tableString;
+		}
+		else
+		{
+			return false;
+		}
+
+	}
+        
+        function short_name($name)
+        {
+            $name_explode = explode(' ',$name);
+            
+            $desired_name = '';
+                                    
+            $row_name_count = 0;
+            foreach($name_explode as $row_name)
+            {
+                if(count($name_explode) >= 3)
+                {
+                    if(in_array($name_explode[2],array('BIN','B.','A/L','ANAK','S/O','B')))
+                    {
+                        if(in_array($name_explode[0],array('MOHD','MOHAMAD','MUHAMMAD','MOHAMED','MUHAMAD','MOHAMMAD','AHMAD')))
+                        {
+                            $desired_name = 'M. ' . $name_explode[1];
                         }
+                        else
+                        {
+                            $desired_name = $name_explode[0] . ' ' . $name_explode[1];
+                        }
+                        break;
                     }
-
-                    $error_string .= implode(',', $errorKey) . ' field is empty';
-                    $row['feedback'] = $error_string;
-                    $row['row'] = $countRow;
-
-                    $error[] = $row;
-                } else {
-
-
-
-                    //first try to change full name to short name
-                    $desired_name = $this->short_name($row[1]);
-
-                    $basic_position = $this->basic_position(trim($row[5]));
-
-                    $value = $row[6] * 10;
-
-                    $team_exist = true;
-
-                    $sql_team = "SELECT * FROM `team` WHERE `name` = " . $this->db->escape($row[7]) . " LIMIT 1";
-                    $query = $this->db->query($sql_team);
-
-                    if ($query->num_rows() == 0) {//team id not found
-                        $response['result'] = false;
-                        $response['message'] = "Team not found or typo: " . $this->db->escape($row[7]);
-                        $response['input'] = "team";
-                        $response['type'] = "input";
-
-                        return $response;
-
-                        //insert the team
-//                        $team_name = explode(' ', $row[7]);
-//
-//                        $short_team_name = '';
-//                        foreach ($team_name as $row_team_name) {
-//                            if ($row_team_name == 'FC') {
-//                                $short_team_name .= $row_team_name;
-//                            } else {
-//                                $short_team_name .= substr($row_team_name, 0, 1);
-//                            }
-//                        }
-//
-//                        $db_team = array(
-//                            'name' => isset($row[7]) && $row[7] != '' ? strtoupper($row[7]) : '',
-//                            'short_name' => isset($short_team_name) && $short_team_name != '' ? strtoupper($short_team_name) : '',
-//                            'status' => 1,
-//                            'created_at' => date("Y-m-d H:i:s"),
-//                            'updated_at' => date("Y-m-d H:i:s")
-//                        );
-//
-//                        $this->db->insert('team', $db_team);
-//                        $team_id = $this->db->insert_id();
-//
-//                        $team_exist = false;
-                    } else {
-                        $team_data = $query->row();
-                    }
-
-                    if ($team_exist == true) {
-                        $team_id = $team_data->id;
-                        $team_name = $team_data->name;
-                    }
-
-                    $check_player = $this->db->where('name', $desired_name)->where('dob', $row[2])->where('identity_number', $row[3])->where('jersey_number', $row[4])->where('team_id', $team_id)->limit(1)->get('player');
-
-                    if ($check_player->num_rows() > 0) {
-                        $row['feedback'] = 'Player ' . $desired_name . ' from ' . $team_name . ' already existed';
-                        $row['row'] = $countRow;
-                        $error[] = $row;
-                        continue;
-                    }
-
-                    if (!is_numeric($row[4])) { //value not int for jersey number
-                        $row['feedback'] = 'Jersey number provided isnt numeric';
-                        $row['row'] = $countRow;
-                        $error[] = $row;
-                        continue;
-                    }
-
-
-                    if (!preg_match("/^\d{6}-\d{2}-\d{4}$/", trim($row[3]))) {
-                        $response['result'] = false;
-                        $response['message'] = "Player identity number format is incorrect, please fix field to proceed.";
-                        $response['input'] = "identity_number";
-                        $response['type'] = "input";
-
-                        return $response;
-
-                        $row['feedback'] = 'Player identity number format is incorrect';
-                        $row['row'] = $countRow;
-                        $error[] = $row;
-                        continue;
-                    } else {
-                        $explode = explode('-', $row[3]);
-                        $dob = '19' . substr($explode[0], 0, 2) . '-' . substr($explode[0], 2, 2) . '-' . substr($explode[0], 4, 2);
-                    }
-
-                    $basic_pos = array("GK", "DF", "MF", "ST");
-                    if (!in_array($pos, $basic_pos)) {
-                        $response['result'] = false;
-                        $response['message'] = "Player position incorrect: " . $pos;
-                        $response['input'] = "position";
-                        $response['type'] = "input";
-
-                        return $response;
-                    }
-
-
-                    $feedback_array = array($desired_name, $value, $basic_position, $team_id, $row[4], $row[8]);
-                    $feedback_array['feedback'] = 'Data Uploaded Succesfully';
-                    $feedback_array['row'] = $countRow;
-
-                    $insert[] = $feedback_array;
-
-                    $db_player = array(
-                        'name' => isset($desired_name) && $desired_name != '' ? $desired_name : '',
-                        'value' => isset($value) && $value != '' ? $value : '',
-                        'position' => isset($basic_position) && $basic_position != '' ? strtoupper($basic_position) : '',
-                        'team_id' => isset($team_id) && $team_id != '' ? $team_id : '',
-                        'dob' => isset($dob) && $dob != '' ? $dob : '',
-                        'identity_number' => isset($row[3]) && $row[3] != '' ? $row[3] : '',
-                        'jersey_number' => isset($row[4]) && $row[4] != '' ? $row[4] : '',
-                        'image_url' => isset($row[8]) && $row[8] != '' ? $row[8] : '',
-                        'short_name' => isset($row[9]) && $row[9] != '' ? $row[9] : '',
-                    );
-
-                    $insertBatch[] = $db_player;
                 }
-            }
-
-            if (!empty($insertBatch))
-                $this->db->insert_batch('player', $insertBatch);
-
-            $returnArray['error'] = $error;
-            $returnArray['success'] = $insert;
-
-            $arrayMerge = array_merge($insert, $error);
-
-            $tableString = '';
-            foreach ($arrayMerge as $mergeValue) {
-                $feedbackColor = 'green';
-
-                if ($mergeValue['feedback'] != 'Data Uploaded Succesfully') {
-                    $feedbackColor = 'red';
-                }
-
-                $tableString .= '<tr style="color:' . $feedbackColor . '"><td>' . $mergeValue['row'] . '</td><td> Name : ' . $mergeValue[0] . ', Value = ' . $mergeValue[1] . ', Position = ' . $mergeValue[2] . ', Team ID = ' . $mergeValue[3] . ', Jersey Number = ' . $mergeValue[4] . ', Image URL = ' . $mergeValue[5] . '</td><td>' . $mergeValue['feedback'] . '</td>';
-            }
-
-
-            return $tableString;
-        } else {
-            return false;
-        }
-    }
-
-    function short_name($name) {
-        $name_explode = explode(' ', $name);
-
-        $desired_name = '';
-
-        $row_name_count = 0;
-        foreach ($name_explode as $row_name) {
-            if (count($name_explode) >= 3) {
-                if (in_array($name_explode[2], array('BIN', 'B.', 'A/L', 'ANAK', 'S/O', 'B'))) {
-                    if (in_array($name_explode[0], array('MOHD', 'MOHAMAD', 'MUHAMMAD', 'MOHAMED', 'MUHAMAD', 'MOHAMMAD', 'AHMAD'))) {
-                        $desired_name = 'M. ' . $name_explode[1];
-                    } else {
-                        $desired_name = $name_explode[0] . ' ' . $name_explode[1];
-                    }
+                if($row_name_count > 2 || strlen($desired_name) > 10)
+                {
                     break;
                 }
-            }
-            if ($row_name_count > 2 || strlen($desired_name) > 10) {
-                break;
-            }
 
-            if (in_array($row_name, array('BIN', 'B.', 'A/L', 'ANAK', 'S/O', 'B'))) {
-                break;
-            }
+                if(in_array($row_name,array('BIN','B.','A/L','ANAK','S/O','B')))
+                {
+                    break;
+                }
 
-            if (in_array($name_explode[$row_name_count], array('MOHD', 'MOHAMAD', 'MUHAMMAD', 'MOHAMED', 'MUHAMAD', 'MOHAMMAD', 'AHMAD'))) {
-                //                                            $desired_name .= $name_explode[$row_name_count];
-                $row_name_count++;
-            } else {
+                if(in_array($name_explode[$row_name_count],array('MOHD','MOHAMAD','MUHAMMAD','MOHAMED','MUHAMAD','MOHAMMAD','AHMAD')))
+                {
+    //                                            $desired_name .= $name_explode[$row_name_count];
+                    $row_name_count++;
+                }
+                else
+                {
 
-                $desired_name .= strtoupper($name_explode[$row_name_count]) . ' ';
-                $row_name_count++;
+                    $desired_name .= strtoupper($name_explode[$row_name_count]) . ' ';
+                    $row_name_count++;
+                }
+
             }
+            
+            return $desired_name;
         }
-
-        return $desired_name;
-    }
-
-    function basic_position($pos) {
-        $basic_pos = array("GK", "DF", "MF", "ST");
-        if (in_array($pos, $basic_pos)) {
-            return $pos;
-        } else {
-            if ($pos == 'AM')
-                return 'MF';
-
-            if ($pos == 'CB')
-                return 'DF';
-
-            if ($pos == 'RB')
-                return 'DF';
-
-            if ($pos == 'DEF')
-                return 'DF';
-
-            if ($pos == 'RB/CB')
-                return 'DF';
-
-            if ($pos == 'RB/LB')
-                return 'DF';
-
-            if ($pos == 'CB/RB')
-                return 'DF';
-
-            if ($pos == 'LB/RB')
-                return 'DF';
-
-            if ($pos == 'LB')
-                return 'DF';
-
-            if ($pos == 'DM')
-                return 'MF';
-
-            if ($pos == 'RW')
-                return 'MF';
-
-            if ($pos == 'AM')
-                return 'MF';
-
-            if ($pos == 'LW')
-                return 'MF';
-
-            if ($pos == 'CDM')
-                return 'MF';
-
-            if ($pos == 'MD')
-                return 'MF';
-
-            if ($pos == 'CM')
-                return 'MF';
-
-            if ($pos == 'MID')
-                return 'MF';
-
-            if ($pos == 'CAM')
-                return 'MF';
-
-            if ($pos == 'RM')
-                return 'MF';
-
-            if ($pos == 'AMF')
-                return 'MF';
-
-            if ($pos == 'SLM')
-                return 'MF';
-
-            if ($pos == 'WG')
-                return 'MF';
-
-            if ($pos == 'WFW')
-                return 'ST';
-
-            if ($pos == 'WFG')
-                return 'ST';
-
-            if ($pos == 'FW')
-                return 'ST';
-
-            if ($pos == 'FWD')
-                return 'ST';
-
-            if ($pos == 'CF')
-                return 'ST';
-
-            if ($pos == 'ST/RW')
-                return 'ST';
+        
+        function basic_position($pos)
+        {
+            $basic_pos = array("GK", "DF", "MF", "ST");
+            if(in_array($pos,$basic_pos))
+            {
+                return $pos;
+            }
+            else
+            {
+                if($pos == 'AM')
+                    return 'MF';
+                
+                if($pos == 'CB')
+                    return 'DF';
+                
+                if($pos == 'RB')
+                    return 'DF';
+                
+                if($pos == 'DEF')
+                    return 'DF';
+                
+                if($pos == 'RB/CB')
+                    return 'DF';
+                
+                if($pos == 'RB/LB')
+                    return 'DF';
+                
+                if($pos == 'CB/RB')
+                    return 'DF';
+                
+                if($pos == 'LB/RB')
+                    return 'DF';
+                
+                if($pos == 'LB')
+                    return 'DF';
+                
+                if($pos == 'DM')
+                    return 'MF';
+                
+                if($pos == 'RW')
+                    return 'MF';
+                
+                if($pos == 'AM')
+                    return 'MF';
+                
+                if($pos == 'LW')
+                    return 'MF';
+                
+                if($pos == 'CDM')
+                    return 'MF';
+                
+                if($pos == 'MD')
+                    return 'MF';
+                
+                if($pos == 'CM')
+                    return 'MF';
+                
+                if($pos == 'MID')
+                    return 'MF';
+                
+                if($pos == 'CAM')
+                    return 'MF';
+                
+                if($pos == 'RM')
+                    return 'MF';
+                
+                if($pos == 'AMF')
+                    return 'MF';
+                
+                if($pos == 'SLM')
+                    return 'MF';
+                
+                if($pos == 'WG')
+                    return 'MF';
+                
+                if($pos == 'WFW')
+                    return 'ST';
+                
+                if($pos == 'WFG')
+                    return 'ST';
+                
+                if($pos == 'FW')
+                    return 'ST';
+                
+                if($pos == 'FWD')
+                    return 'ST';
+                
+                if($pos == 'CF')
+                    return 'ST';
+                
+                if($pos == 'ST/RW')
+                    return 'ST';
+                
+            }
+            
+            
         }
-    }
-
-    function player_quick($post = array()) {
-        if (isset($post) && sizeof($post) > 0) {
-            if (isset($post['name']) && $post['name'] != '') {
-                $name = $post['name'];
-            }
-
-            if (isset($post['id']) && $post['id'] != '') {
-                $id = $post['id'];
-            }
-
-
-            if (isset($post['input_value']) && $post['input_value'] != '') {
-                $value = $post['input_value'];
-            }
-
-            $rs = $this->db->set($name, $value)->where('id', $id)->update('player');
-
-            if ($rs == true) {
-                $response['result'] = true;
-                $response['message'] = "Player " . $name . " field for id " . $id . " updated to " . $value . ".";
-            } else {
-                $response['result'] = false;
-                $response['message'] = "Error occured while updating player data.";
-            }
-
-            return $response;
-        }
-    }
-
-    function player_match_history($player_id = NULL) {
-        if ($player_id != NULL) {
-            $player_in_fixtures = $this->db->where('player_id', $player_id)->get('player_in_fixtures')->result();
+	
+	function player_quick($post = array())
+	{
+		if(isset($post) && sizeof($post) > 0)
+		{
+			if(isset($post['name']) && $post['name'] != '')
+			{
+				$name = $post['name'];
+			}
+			
+			if(isset($post['id']) && $post['id'] != '')
+			{
+				$id = $post['id'];
+			}
+			
+			
+			if(isset($post['input_value']) && $post['input_value'] != '')
+			{
+				$value = $post['input_value'];
+			}
+			
+			$rs = $this->db->set($name, $value)->where('id', $id)->update('player');
+			
+			if($rs == true)
+			{
+				$response['result'] = true;
+				$response['message'] = "Player ".$name." field for id ". $id ." updated to ". $value .".";
+			}
+			else
+			{
+				$response['result'] = false;
+				$response['message'] = "Error occured while updating player data.";
+			}
+			
+			return $response;
+		}
+	}
+        
+    function player_match_history($player_id = NULL)
+    {
+        if($player_id != NULL)
+        {
+            $player_in_fixtures = $this->db->where('player_id',$player_id)->get('player_in_fixtures')->result();
 
             $row = array();
-            foreach ($player_in_fixtures as $row_player_in_fixtures) {
-                $fixture = $this->db->where('id', $row_player_in_fixtures->fixture_id)->get('fixtures')->row();
+            foreach($player_in_fixtures as $row_player_in_fixtures)
+            {
+                $fixture = $this->db->where('id',$row_player_in_fixtures->fixture_id)->get('fixtures')->row();
 
-                $home = $this->db->where('id', $fixture->home_team_id)->get('team')->row();
-                $away = $this->db->where('id', $fixture->away_team_id)->get('team')->row();
-                $season = $this->db->where('id', $fixture->season_id)->get('season')->row();
+                $home = $this->db->where('id',$fixture->home_team_id)->get('team')->row();
+                $away = $this->db->where('id',$fixture->away_team_id)->get('team')->row();
+                $season = $this->db->where('id',$fixture->season_id)->get('season')->row();
                 $action = json_decode($row_player_in_fixtures->action);
 
                 $score = 0;
@@ -902,45 +887,255 @@ class Players_m extends CI_Model {
                 $yellow = 0;
                 $minutes = 0;
 
-                foreach ($action as $row_action) {
-                    if ($row_action->name == 'suboff') {
+                foreach($action as $row_action)
+                {
+                    if($row_action->name == 'suboff')
+                    {
                         $minutes = $row_action->time;
                     }
 
-                    if ($row_action->name == 'score') {
+                    if($row_action->name == 'score')
+                    {
                         $score = $score++;
                     }
 
-                    if ($row_action->name == 'assist') {
+                    if($row_action->name == 'assist')
+                    {
                         $assist = $assist++;
                     }
 
-                    if ($row_action->name == 'yellow') {
+                    if($row_action->name == 'yellow')
+                    {
                         $yellow = $yellow++;
                     }
 
-                    if ($row_action->name == 'red') {
+                    if($row_action->name == 'red')
+                    {
                         $red = $red++;
                     }
                 }
 
                 $data_array = array(
-                    'fixture' => $fixture,
-                    'home' => $home,
-                    'away' => $away,
-                    'season' => $season,
-                    'action' => array('score' => $score, 'assist' => $assist, 'yellow' => $yellow, 'red' => $red, 'minutes' => $minutes),
+                    'fixture'=>$fixture,
+                    'home'=>$home,
+                    'away'=>$away,
+                    'season'=>$season,
+                    'action'=>array('score'=>$score,'assist'=>$assist,'yellow'=>$yellow,'red'=>$red,'minutes'=>$minutes),
                 );
 
                 $row[] = $data_array;
             }
 
             return $row;
-        } else {
+        }
+        else {
             return false;
         }
     }
+    
+    function get_club_player($team_id = NULL,$search_data = array())
+    {
+        if($team_id != NULL)
+        {
+            $is_download = (isset($search_data['download']) && $search_data['download'] == 'true');
 
+            $where = "WHERE `player`.`team_id` = " . $team_id . ' ';
+            $orderby = "`player`.`id`";
+            
+            if(is_array($search_data) && sizeof($search_data) > 0){
+
+                if(isset($search_data['sql_sort_column']) && $search_data['sql_sort_column'] != "")
+                {
+                        $orderby = $search_data['sql_sort_column'];
+                }
+                else
+                {
+                        $orderby = "`player`.`id`";
+                }
+
+                if(!isset($search_data['sql_sort']))
+                {
+                        $search_data['sql_sort'] = "DESC";
+                }
+
+                if(isset($search_data['filter']) && $search_data['filter'] != "")
+                {
+                    if(isset($search_data['filterBy']) && $search_data['filterBy'] != "")
+                    {
+                        if($search_data['filter'] == 'position')
+                        {
+                            $search_data['filter'] = '`player`.`position`';
+                        }
+
+                        $where .= ($where == "" ? " WHERE " : " AND ") . $search_data['filter'] ." = " . $this->db->escape($search_data['filterBy']) . " ";
+
+                    }
+                }
+
+                if(isset($search_data['search']) && $search_data['search'] != "")
+                {
+                    $where .= ($where == "" ? " WHERE " : " AND ") . " ( `player`.`name` LIKE " . $this->db->escape("%".$search_data['search']."%") . " OR `player`.`short_name` LIKE " . $this->db->escape("%".$search_data['search']."%")  . " OR LOWER(`player`.`name`) LIKE " . $this->db->escape("%".strtolower($search_data['search'])."%") . " OR LOWER(`player`.`short_name`) LIKE " . $this->db->escape("%".$search_data['search']."%") . " ) ORDER BY " .  $orderby . " " . $search_data['sql_sort'] ;
+                }
+                else
+                {
+                    $where .= "ORDER BY " . $orderby . " " . $search_data['sql_sort'] ;
+                }
+                
+            }
+            else
+            {
+                    $where .= "ORDER BY " . $orderby . " DESC";
+            }
+
+            $sql = "SELECT `player`.`id`,`player`.`name`,`player`.`value`,`player`.`team`,`player`.`jersey_number`,`player`.`position`,`player`.`team_id`,`team`.`name` as `team_name` FROM `player` LEFT JOIN `team` ON `player`.`team_id` = `team`.`id` " . $where ;
+            $query = $this->db->query($sql);
+            
+            $data['total_rows'] = $query->num_rows();
+            $config['base_url'] = base_url() . 'secure/update_club/'.encrypt_data($team_id).'/' . $this->uri->segment(4);
+            $config['uri_segment'] = 5;
+            $config['total_rows'] = $data['total_rows'];
+            $config['per_page'] = 10;
+
+            $this->pagination->initialize($config);
+
+            $data['pagination'] = $this->pagination->create_links();
+            $data['num_per_page'] = $config['per_page'];
+
+            $limit = ' LIMIT 0, ' . $config['per_page'];
+
+            if($data['total_rows'] > 0) {
+                if($this->uri->segment($config['uri_segment']) AND is_numeric($this->uri->segment($config['uri_segment'])))
+                {
+                    $limit = ' LIMIT ' . $this->uri->segment($config['uri_segment']) . ', ' . $config['per_page'];
+                }
+                else
+                {
+                    $limit = ' LIMIT 0, ' . $config['per_page'];
+                }
+            }
+
+            if($is_download === true)
+            {
+                    $sql_query = "SELECT `player`.`id`,`player`.`name`,`player`.`value`,`player`.`team`,`player`.`jersey_number`,`player`.`position`,`player`.`team_id`,`team`.`name` as `team_name` FROM `player` LEFT JOIN `team` ON `player`.`team_id` = `team`.`id` " . $where ;
+            }
+            else
+            {
+                    $sql_query = "SELECT `player`.`id`,`player`.`name`,`player`.`value`,`player`.`team`,`player`.`jersey_number`,`player`.`position`,`player`.`team_id`,`team`.`name` as `team_name` FROM `player` LEFT JOIN `team` ON `player`.`team_id` = `team`.`id` " . $where . $limit ;
+            }
+
+            $data['query'] = $this->db->query($sql_query);
+
+            $result = $data['query']->result();
+
+            
+            $rows = [];
+
+            if($this->uri->segment(5) == "")
+            {
+                    $j = 1;
+
+            }
+            else
+            {
+                    $j = $this->uri->segment(5)+1;
+            }
+
+            foreach($result as $i=>$res){
+
+                    if($res->id != '')
+                    {
+                        $name = ucwords(strtolower($res->name));
+                    }
+
+                    $action = '<div class="btn-group" role="group" aria-label="Basic example">';
+
+                    // $action .= ' <button type="button" id="submit_'. $res->id . '" class="btn btn-icon btn-primary quick_update"><i class="fas fa-bolt"></i></button>';
+                    $action .= ' <a href="'.base_url().'secure/update_player/'. encrypt_data($res->id) . '" class="btn btn-icon btn-success "><i class="fas fa-user-edit"></i></a>';
+
+                    $action .= '</div>';
+
+                    $row = [
+                            '#' => $j++,
+                            // 'ID' => 'P'.pad_zero($res->id),
+                            'Name' => $name,
+                            'Value' => isset($res->value) && $res->value != '' ? $res->value : '-',
+                            'Position' =>  $res->position,
+                            'Action' => $action,
+                    ];
+
+                    $rows[] = $row;
+
+            }
+
+            if($is_download)
+            {
+                    download_csv($rows, 'players_list'.today().'.csv');
+                    exit;
+            }
+
+            $filter = [
+                    'player.position' => 'Position',
+            ];
+
+            $width = [ 
+                    '#' => 40,
+                    // 'ID' => 80,
+                    'Name' => 150,
+                    'Value' => 100,
+                    'Position' => 100,
+                    'Action' => 100,
+            ];
+
+            $data['actions'] = [
+                    '<a href="javascript:void();" class="btn btn-info download-button mr-2">Download</a>',
+                    '<a href="'.base_url().'secure/player_form" class="btn btn-info">Add New Player</a>',
+            ];
+
+            $sort = [
+            '#' => '`player`.`id`',
+            'Name' => '`player`.`name`',
+            'Value' => '`player`.`value`',
+            'Position' => '`player`.`position`',
+            ];
+
+            $center = [
+            // '#',
+            // 'Value',
+            // 'Position',
+            'Action',
+            ];
+
+            $data['total'] = $data['total_rows'];
+            $data['rows'] = $rows;
+            $data['width'] = $width;
+            $data['align_center'] = $center;
+            $data['sort'] = $sort;
+
+
+            foreach($filter as $row=> $val)
+            {
+                $explodeFilter = explode('.',$row);
+                $tableName = $explodeFilter[0];
+                $columnName = $explodeFilter[1];
+
+                $sql_query = "SELECT DISTINCT(`".$columnName."`) FROM `" . $tableName . "`";
+                $query = $this->db->query($sql_query)->result();
+
+                foreach($query as $a=>$b)
+                {
+                    $data['selectFilter'][$columnName][] = ucwords($b->$columnName);
+                }
+            }
+
+            $filter = [
+                    'position' => 'Position',
+            ];
+
+            $data['filter'] = $filter;
+
+            return $data;
+        }
+    }
 }
 
 ?>

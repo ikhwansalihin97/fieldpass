@@ -317,16 +317,6 @@ class Team_m extends CI_Model {
                         return $response;
                 }
 
-                if(!isset($post['status']))
-                {
-                        $response['result'] = false;
-                        $response['message'] = "Club status field empty, please choose club status to proceed.";
-                        $response['input'] = "status"; 
-                        $response['type'] = "select";
-
-                        return $response;
-                }
-
 
                 if(isset($post['manager']) && $post['manager'] == "" )
                 {
@@ -343,7 +333,6 @@ class Team_m extends CI_Model {
                 $db_team = array (
                 'name'=>isset($post['name']) && $post['name'] != '' ? $post['name'] :'',
                 'short_name'=>isset($post['short_name']) && $post['short_name'] != '' ? $post['short_name'] :'',
-                'status'=>isset($post['status']) && $post['status'] != '' ? $post['status'] :'',
                 'manager'=>isset($post['manager']) && $post['manager'] != '' ? $post['manager'] :'',
                 // 'created_by'=>$this->session->userdata('user_id'),
                 'created_at'=>date("Y-m-d H:i:s"),
