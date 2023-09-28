@@ -377,7 +377,7 @@ class Players_m extends CI_Model {
             } else {
 
                 if (isset($files) && sizeof($files) > 0) {
-                    $rs = $this->user_image_upload($files, $player_id);
+                    $rs = $this->user_image_upload($files, $player_id, $player->team_id);
                 }
             }
 
@@ -396,7 +396,7 @@ class Players_m extends CI_Model {
         }
     }
 
-    function user_image_upload($files = array(), $player_id) {
+    function user_image_upload($files = array(), $player_id, $team_id) {
         $user_id = $this->session->userdata('user_id');
 
         if (!is_dir("uploads"))
@@ -408,7 +408,7 @@ class Players_m extends CI_Model {
         if (!is_dir("uploads/player/"))
             mkdir("uploads/player/", 0777, TRUE);
 
-        $config['upload_path'] = "uploads/player/";
+        $config['upload_path'] = "uploads/player/".$team_id;
         $config['allowed_types'] = 'jpg|jpeg|png|gif';
         $config['max_size'] = '0';
 
