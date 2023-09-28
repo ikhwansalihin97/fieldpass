@@ -395,9 +395,9 @@ class CI_Upload {
 
 				$_file = $_file[$field];
 			}
-                                                print_r($_file);die;
 
 		}
+                                                print_r($_file);die;
 
 		if ( ! isset($_file))
 		{
