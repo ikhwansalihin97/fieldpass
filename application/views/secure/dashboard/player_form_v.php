@@ -26,7 +26,7 @@ $this->load->view('secure/m_header');
                                                     <?php
                                                     $default_image = base_url() . 'template/metronic/dist/assets/media/users/blank.png';
                                                     if(isset($form_data['image_url']) && $form_data['image_url'] != '' )
-                                                        $image_url = base_url() . $form_data['image_url'];
+                                                        $image_url = $form_data['image_url'];
                                                     else
                                                         $image_url = base_url() . 'template/metronic/dist/assets/media/users/blank.png';
                                                     ?>
