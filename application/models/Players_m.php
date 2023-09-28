@@ -483,7 +483,6 @@ class Players_m extends CI_Model {
         $config['upload_path'] = "uploads/player/".$team_id;
         $config['allowed_types'] = 'jpg|jpeg|png|gif';
         $config['max_size'] = '0';
-                                    print_r($config);die;
 
             $this->load->library('upload', $config);
 
@@ -500,6 +499,7 @@ class Players_m extends CI_Model {
                 {
                     $image_data = $query->row();
                     $image_data = str_replace('https://'.$_SERVER['SERVER_NAME'], '', $image_data);
+                                    print_r($image_data);die;
 
                     if($image_data->image_url != "")
                     {
