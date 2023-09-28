@@ -487,7 +487,6 @@ class Players_m extends CI_Model {
             $this->load->library('upload', $config);
 
         if (!$this->upload->do_upload("profile_avatar",$player_id)) {
-                                                print_r($player_id);die;
 
             $upload_error = $this->upload->display_errors();
             return array('result' => false, 'msg' => $upload_error);
