@@ -491,9 +491,7 @@ class Players_m extends CI_Model {
             $upload_error = $this->upload->display_errors();
             return array('result' => false, 'msg' => $upload_error);
         } else {
-            ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+           echo $_SERVER['SERVER_NAME'];die;
             $upload_data = $this->upload->data();
                 
                 $sql = "SELECT * FROM `player` WHERE `id` = " . $this->db->escape($player_id) . " LIMIT 1";
