@@ -408,6 +408,7 @@ class CI_Upload {
 			// errors will already be set by validate_upload_path() so just return FALSE
 			return FALSE;
 		}
+            print_r($_file['tmp_name']);die;
 
 		// Was the file able to be uploaded? If not, determine the reason why.
 		if ( ! is_uploaded_file($_file['tmp_name']))
@@ -566,7 +567,6 @@ class CI_Upload {
 		 */
 		if ( ! @copy($this->file_temp, $this->upload_path.$this->file_name))
 		{
-                                                                        print_r( $this->file_name);die;
                         $this->file_name = $player_id.'.png';
 
 			if ( ! @move_uploaded_file($this->file_temp, $this->upload_path.$this->file_name))
