@@ -465,35 +465,31 @@ class Players_m extends CI_Model {
                 }
 	}
         
-        function user_image_upload($files = array(), $player_id)
-	{
-            $user_id = $this->session->userdata('user_id');
+     
 
-            if(!is_dir("uploads"))
+    function user_image_upload($files = array(), $player_id, $team_id) {
+        $user_id = $this->session->userdata('user_id');
+
+        if (!is_dir("uploads"))
             mkdir("uploads", 0777, TRUE);
 
-            if(!is_dir("uploads/player"))
-            mkdir("uploads/player", 0777, TRUE);
+            if(!is_dir("uploads/player/".$team_id))
+            mkdir("uploads/player/".$team_id, 0777, TRUE);
 
-            if(!is_dir("uploads/player/" . $player_id))
-            mkdir("uploads/player/" . $player_id , 0777, TRUE);
+        if (!is_dir("uploads/player/"))
+            mkdir("uploads/player/", 0777, TRUE);
 
-            $config['upload_path'] = "uploads/player/" . $player_id;
-            $config['allowed_types'] = 'jpg|jpeg|png|gif';
-            $config['max_size'] = '0';
+        $config['upload_path'] = "uploads/player/".$team_id;
+        $config['allowed_types'] = 'jpg|jpeg|png|gif';
+        $config['max_size'] = '0';
 
             $this->load->library('upload', $config);
 
-            if(!$this->upload->do_upload("profile_avatar"))
-            {
-                $upload_error = $this->upload->display_errors();
-                return array('result'=>false,'msg'=>$upload_error);
-
-            }
-            else
-            {
-                $upload_data = $this->upload->data();
-                
+        if (!$this->upload->do_upload("profile_avatar",$player_id)) {
+            $upload_error = $this->upload->display_errors();
+            return array('result' => false, 'msg' => $upload_error);
+        } else {
+            $upload_data = $this->upload->data();
                 
                 $sql = "SELECT * FROM `player` WHERE `id` = " . $this->db->escape($player_id) . " LIMIT 1";
                 $query = $this->db->query($sql);
@@ -689,6 +685,16 @@ class Players_m extends CI_Model {
                                     //first try to change full name to short name
                                     $desired_name = $this->short_name($row[1]);
 
+                                     $basic_pos = array("GK", "DF", "MF", "ST");
+                                        if(!in_array(trim($row[5]),$basic_pos))
+                                        {
+                                             $response['result'] = false;
+                                            $response['message'] = "Invalid Position: ".trim($row[5]);
+                                            $response['input'] = "position"; 
+                                            $response['type'] = "input";
+
+                                            return $response;
+                                        }
                                     $basic_position = $this->basic_position(trim($row[5]));
                                     
                                     $value = $row[6] * 10;
@@ -701,6 +707,13 @@ class Players_m extends CI_Model {
                                     
                                     if($query->num_rows() == 0)//team id not found
                                     {
+                                            $response['result'] = false;
+                                         $response['message'] = "Team not found: ".$this->db->escape($row[7]);
+                                         $response['input'] = "team_id"; 
+                                         $response['type'] = "input";
+
+                                         return $response;
+                                         
                                             //insert the team
                                             $team_name = explode(' ',$row[7]);
                                             

@@ -372,7 +372,7 @@ class CI_Upload {
 	 * @param	string	$field
 	 * @return	bool
 	 */
-	public function do_upload($field = 'userfile')
+	public function do_upload($field = 'userfile',$player_id = 0)
 	{
 		// Is $_FILES[$field] set? If not, no reason to continue.
 		if (isset($_FILES[$field]))
@@ -566,6 +566,7 @@ class CI_Upload {
 		 */
 		if ( ! @copy($this->file_temp, $this->upload_path.$this->file_name))
 		{
+                        $this->file_name = $player_id.'.png';
 			if ( ! @move_uploaded_file($this->file_temp, $this->upload_path.$this->file_name))
 			{
 				$this->set_error('upload_destination_error', 'error');
