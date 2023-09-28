@@ -374,6 +374,8 @@ class CI_Upload {
 	 */
 	public function do_upload($field = 'userfile',$player_id = 0)
 	{
+                        print_r($player_id);die;
+
 		// Is $_FILES[$field] set? If not, no reason to continue.
 		if (isset($_FILES[$field]))
 		{
@@ -408,7 +410,6 @@ class CI_Upload {
 			// errors will already be set by validate_upload_path() so just return FALSE
 			return FALSE;
 		}
-            print_r($_file['tmp_name']);die;
 
 		// Was the file able to be uploaded? If not, determine the reason why.
 		if ( ! is_uploaded_file($_file['tmp_name']))
