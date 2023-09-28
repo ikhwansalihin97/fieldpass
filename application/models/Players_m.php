@@ -493,6 +493,7 @@ class Players_m extends CI_Model {
         } else {
             $upload_data = $this->upload->data();
                 
+print_r($upload_data);die;
                 $sql = "SELECT * FROM `player` WHERE `id` = " . $this->db->escape($player_id) . " LIMIT 1";
                 $query = $this->db->query($sql);
 
@@ -500,7 +501,6 @@ class Players_m extends CI_Model {
                 {
                     $image_data = $query->row();
                     $image_data = str_replace('https://'.$_SERVER['SERVER_NAME'], '', $image_data);
-echo $image_data;die;
                     if($image_data->image_url != "")
                     {
                         if(file_exists($image_data->image_url))
