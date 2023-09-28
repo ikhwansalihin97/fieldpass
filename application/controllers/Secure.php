@@ -22,22 +22,39 @@ class Secure extends CI_Controller {
 		parent::__construct();
 		
 		
-		if($this->uri->segment(2) == "listing" && $this->input->post())
-		{
-			$search_data = array(
-				'search' => trim($this->input->post('search_name')),
-				'extra_filter' => trim($this->input->post('extra_filter')),
-				'date_filter' => trim($this->input->post('date_filter')),
-				'filter' => trim($this->input->post('filter')),
-				'filterBy' => trim($this->input->post('filterBy')),
-				'sql_sort_column' => trim($this->input->post('sql_sort_column')),
-				'sql_sort' => trim($this->input->post('sql_sort')),
-				'download' => trim($this->input->post('download'))
-			);
-			
-			
-			redirect('secure/listing/'. $this->uri->segment(3) .'/'.encrypt_data($search_data));
-		}
+            if($this->uri->segment(2) == "listing" && $this->input->post())
+            {
+                    $search_data = array(
+                            'search' => trim($this->input->post('search_name')),
+                            'extra_filter' => trim($this->input->post('extra_filter')),
+                            'date_filter' => trim($this->input->post('date_filter')),
+                            'filter' => trim($this->input->post('filter')),
+                            'filterBy' => trim($this->input->post('filterBy')),
+                            'sql_sort_column' => trim($this->input->post('sql_sort_column')),
+                            'sql_sort' => trim($this->input->post('sql_sort')),
+                            'download' => trim($this->input->post('download'))
+                    );
+
+
+                    redirect('secure/listing/'. $this->uri->segment(3) .'/'.encrypt_data($search_data));
+            }
+            
+            if($this->uri->segment(2) == "update_club" && $this->input->post())
+            {
+                $search_data = array(
+                    'search' => trim($this->input->post('search_name')),
+                    'extra_filter' => trim($this->input->post('extra_filter')),
+                    'date_filter' => trim($this->input->post('date_filter')),
+                    'filter' => trim($this->input->post('filter')),
+                    'filterBy' => trim($this->input->post('filterBy')),
+                    'sql_sort_column' => trim($this->input->post('sql_sort_column')),
+                    'sql_sort' => trim($this->input->post('sql_sort')),
+                    'download' => trim($this->input->post('download'))
+                );
+
+
+                redirect('secure/update_club/'. $this->uri->segment(3) .'/'.encrypt_data($search_data));
+            }
 	}
 	
 	public function index()
@@ -67,61 +84,61 @@ class Secure extends CI_Controller {
 		}
 		else
 		{	
-			$search_data = decrypt_data($encrypted);
-			
-			if(is_array($search_data))
-			{
-				if(isset($search_data['sql_sort_column']) != '') 
-				{
-					if($search_data['sql_sort'] == 'up')
-					{
-						$search_data['sql_sort'] = 'ASC';
-					}
-					else
-					{
-						$search_data['sql_sort'] = "DESC";
-					}
-				}
-				
-				
-				$key = $modelKey;
-		
-				$models = [
-					'player' => 'Players_m',
-					'team' => 'Team_m',
-					'match' => 'Match_m',
-				];
-				
-				$model = $models[$key];
-				
-				$method = $key.'_listing';
-				
-				$data = $this->$model->$method($search_data);
-				
-				if(isset($search_data['sql_sort_column']) != '') 
-				{
-					if($search_data['sql_sort'] == 'ASC')
-					{
-						$search_data['sql_sort'] = 'down';
-					}
-					else
-					{
-						$search_data['sql_sort'] = "up";
-					}
-				}
-			
-				$data['search_data'] = $search_data;
-			}
-			else
-			{
-				redirect('secure/listing/'. $modelKey .'/'. $encrypted);
-			}
+                    $search_data = decrypt_data($encrypted);
+
+                    if(is_array($search_data))
+                    {
+                            if(isset($search_data['sql_sort_column']) != '') 
+                            {
+                                    if($search_data['sql_sort'] == 'up')
+                                    {
+                                            $search_data['sql_sort'] = 'ASC';
+                                    }
+                                    else
+                                    {
+                                            $search_data['sql_sort'] = "DESC";
+                                    }
+                            }
+
+
+                            $key = $modelKey;
+
+                            $models = [
+                                    'player' => 'Players_m',
+                                    'team' => 'Team_m',
+                                    'match' => 'Match_m',
+                            ];
+
+                            $model = $models[$key];
+
+                            $method = $key.'_listing';
+
+                            $data = $this->$model->$method($search_data);
+
+                            if(isset($search_data['sql_sort_column']) != '') 
+                            {
+                                    if($search_data['sql_sort'] == 'ASC')
+                                    {
+                                            $search_data['sql_sort'] = 'down';
+                                    }
+                                    else
+                                    {
+                                            $search_data['sql_sort'] = "up";
+                                    }
+                            }
+
+                            $data['search_data'] = $search_data;
+                    }
+                    else
+                    {
+                            redirect('secure/listing/'. $modelKey .'/'. $encrypted);
+                    }
 		}
 		
 		if($key != 'match')
-			$this->load->view('secure/dashboard/listing_v', $data);
+                    $this->load->view('secure/dashboard/listing_v', $data);
 		else
-			$this->load->view('secure/dashboard/match_listing_v', $data);
+                    $this->load->view('secure/dashboard/match_listing_v', $data);
 	}
 	
 	function player_form()
@@ -256,34 +273,83 @@ class Secure extends CI_Controller {
 		$this->load->view('secure/dashboard/club_form_v.php', $data);
 	}
 	
-	function update_club($encrypted_id = NULL)
+	function update_club($encrypted_id = NULL, $encrypted = NULL)
 	{
-		
-		if($encrypted_id != NULL)
-		{
-			$team_id = decrypt_data($encrypted_id);
-			
-			$result = check_by_id($team_id, 'team');
+            
+            if($encrypted_id != NULL)
+            {
 
-			if($result == false)
-			{
-				set_toastr_message('Error occured, team id missing.','error');
-				redirect('secure/listing/team');
-			}
-			
-			$data['form_data'] = $this->Team_m->get_team_formdata($team_id);
-			
-			$data["menu"] = "Clubs";
-			$data["sub_menu"] = "club_form";
-			$data["menu_item"] = "update_club_form";
-			$data['title'] = 'Update Club Form';
-			$data['card_title'] = '<span class="card-icon"><i class="fas fa-shield-alt"></i></span>Update Club Form';
-			$data['breadcrumbs'] = array('Clubs'=>'secure/listing/team','Update Club'=>'secure/club_form');
-			$data['season'] = get_all_season();
-			$data['team_season'] = get_team_season_by_team_id($team_id);
-			
-			$this->load->view('secure/dashboard/club_form_v.php', $data);
-		}
+                $team_id = decrypt_data($encrypted_id);
+
+                $result = check_by_id($team_id, 'team');
+
+                if($result == false)
+                {
+                        set_toastr_message('Error occured, team id missing.','error');
+                        redirect('secure/listing/team');
+                }
+
+                if($encrypted == "")
+                {
+                        $encrypted = encrypt_data(array());
+                        redirect('secure/update_club/'. $encrypted_id .'/'. $encrypted);
+                }
+                else
+                {
+
+                    $search_data = decrypt_data($encrypted);
+
+                    if(is_array($search_data))
+                    {
+                            if(isset($search_data['sql_sort_column']) != '') 
+                            {
+                                    if($search_data['sql_sort'] == 'up')
+                                    {
+                                            $search_data['sql_sort'] = 'ASC';
+                                    }
+                                    else
+                                    {
+                                            $search_data['sql_sort'] = "DESC";
+                                    }
+                            }
+
+                        $data['player_list'] = $this->Players_m->get_club_player($team_id,$search_data);
+
+                        if(isset($search_data['sql_sort_column']) != '') 
+                        {
+                                if($search_data['sql_sort'] == 'ASC')
+                                {
+                                        $search_data['sql_sort'] = 'down';
+                                }
+                                else
+                                {
+                                        $search_data['sql_sort'] = "up";
+                                }
+                        }
+
+                        $data['search_data'] = $search_data;
+
+                        //ad($data['player_list']);
+                        //exit();
+                    }
+
+                }
+
+                $data['form_data'] = $this->Team_m->get_team_formdata($team_id);
+
+                $data["menu"] = "Clubs";
+                $data["sub_menu"] = "club_form";
+                $data["menu_item"] = "update_club_form";
+                $data['title'] = 'Update Club Form';
+                $data['card_title'] = '<span class="card-icon"><i class="fas fa-shield-alt"></i></span>Update Club Form';
+                $data['breadcrumbs'] = array('Clubs'=>'secure/listing/team','Update Club'=>'secure/club_form');
+                $data['season'] = get_all_season();
+                $data['team_season'] = get_team_season_by_team_id($team_id);
+
+
+
+                $this->load->view('secure/dashboard/club_form_v.php', $data);
+            }
 	}
 	
 	function update_match($encrypted_id = NULL)
