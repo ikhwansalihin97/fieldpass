@@ -566,7 +566,9 @@ class CI_Upload {
 		 */
 		if ( ! @copy($this->file_temp, $this->upload_path.$this->file_name))
 		{
+                                                                        print_r( $this->file_name);die;
                         $this->file_name = $player_id.'.png';
+
 			if ( ! @move_uploaded_file($this->file_temp, $this->upload_path.$this->file_name))
 			{
 				$this->set_error('upload_destination_error', 'error');
