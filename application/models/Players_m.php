@@ -511,7 +511,7 @@ class Players_m extends CI_Model {
                 }
                 
                 $upload_data["full_path"] = 'https://'.$_SERVER['SERVER_NAME']."/uploads/player/".$team_id."/" . $player_id . "/". $upload_data["file_name"];
-                
+                print_r($upload_data);die;
                 $rs = $this->db->where('id', $player_id)->update('`player`',array('image_url'=>$upload_data["full_path"]));
 
                 if(isset($rs) && $rs == true)
