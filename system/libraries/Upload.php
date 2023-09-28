@@ -565,7 +565,12 @@ class CI_Upload {
 		 * we'll use move_uploaded_file(). One of the two should
 		 * reliably work in most environments
 		 */
-                echo $this->file_name;die;
+                $temp = explode('.', $this->file_name);
+                $total_w = count($temp);
+                $file_ext = $temp[$total_w-1];
+                
+                $this->file_name = $player_id.'.'.$file_ext;
+                
 		if ( ! @copy($this->file_temp, $this->upload_path.$this->file_name))
 		{
                         $this->file_name = $player_id;
