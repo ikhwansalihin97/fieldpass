@@ -86,14 +86,14 @@ class Players_m extends CI_Model {
 		$limit = ' LIMIT 0, ' . $config['per_page'];
 		
 		if($data['total_rows'] > 0) {
-			if($this->uri->segment($config['uri_segment']) AND is_numeric($this->uri->segment($config['uri_segment'])))
-			{
-				$limit = ' LIMIT ' . $this->uri->segment($config['uri_segment']) . ', ' . $config['per_page'];
-			}
-			else
-			{
-				$limit = ' LIMIT 0, ' . $config['per_page'];
-			}
+                    if($this->uri->segment($config['uri_segment']) AND is_numeric($this->uri->segment($config['uri_segment'])))
+                    {
+                        $limit = ' LIMIT ' . $this->uri->segment($config['uri_segment']) . ', ' . $config['per_page'];
+                    }
+                    else
+                    {
+                        $limit = ' LIMIT 0, ' . $config['per_page'];
+                    }
 		}
 		
 		if($is_download === true)
@@ -1025,72 +1025,276 @@ class Players_m extends CI_Model {
 		}
 	}
         
-        function player_match_history($player_id = NULL)
+    function player_match_history($player_id = NULL)
+    {
+        if($player_id != NULL)
         {
-            if($player_id != NULL)
-            {
-                $player_in_fixtures = $this->db->where('player_id',$player_id)->get('player_in_fixtures')->result();
-                
-                $row = array();
-                foreach($player_in_fixtures as $row_player_in_fixtures)
-                {
-                    $fixture = $this->db->where('id',$row_player_in_fixtures->fixture_id)->get('fixtures')->row();
+            $player_in_fixtures = $this->db->where('player_id',$player_id)->get('player_in_fixtures')->result();
 
-                    $home = $this->db->where('id',$fixture->home_team_id)->get('team')->row();
-                    $away = $this->db->where('id',$fixture->away_team_id)->get('team')->row();
-                    $season = $this->db->where('id',$fixture->season_id)->get('season')->row();
-                    $action = json_decode($row_player_in_fixtures->action);
-                    
-                    $score = 0;
-                    $assist = 0;
-                    $red = 0;
-                    $yellow = 0;
-                    $minutes = 0;
-                    
-                    foreach($action as $row_action)
+            $row = array();
+            foreach($player_in_fixtures as $row_player_in_fixtures)
+            {
+                $fixture = $this->db->where('id',$row_player_in_fixtures->fixture_id)->get('fixtures')->row();
+
+                $home = $this->db->where('id',$fixture->home_team_id)->get('team')->row();
+                $away = $this->db->where('id',$fixture->away_team_id)->get('team')->row();
+                $season = $this->db->where('id',$fixture->season_id)->get('season')->row();
+                $action = json_decode($row_player_in_fixtures->action);
+
+                $score = 0;
+                $assist = 0;
+                $red = 0;
+                $yellow = 0;
+                $minutes = 0;
+
+                foreach($action as $row_action)
+                {
+                    if($row_action->name == 'suboff')
                     {
-                        if($row_action->name == 'suboff')
-                        {
-                            $minutes = $row_action->time;
-                        }
-                        
-                        if($row_action->name == 'score')
-                        {
-                            $score = $score++;
-                        }
-                        
-                        if($row_action->name == 'assist')
-                        {
-                            $assist = $assist++;
-                        }
-                        
-                        if($row_action->name == 'yellow')
-                        {
-                            $yellow = $yellow++;
-                        }
-                        
-                        if($row_action->name == 'red')
-                        {
-                            $red = $red++;
-                        }
+                        $minutes = $row_action->time;
                     }
-                    
-                    $data_array = array(
-                        'fixture'=>$fixture,
-                        'home'=>$home,
-                        'away'=>$away,
-                        'season'=>$season,
-                        'action'=>array('score'=>$score,'assist'=>$assist,'yellow'=>$yellow,'red'=>$red,'minutes'=>$minutes),
-                    );
-                    
-                    $row[] = $data_array;
+
+                    if($row_action->name == 'score')
+                    {
+                        $score = $score++;
+                    }
+
+                    if($row_action->name == 'assist')
+                    {
+                        $assist = $assist++;
+                    }
+
+                    if($row_action->name == 'yellow')
+                    {
+                        $yellow = $yellow++;
+                    }
+
+                    if($row_action->name == 'red')
+                    {
+                        $red = $red++;
+                    }
+                }
+
+                $data_array = array(
+                    'fixture'=>$fixture,
+                    'home'=>$home,
+                    'away'=>$away,
+                    'season'=>$season,
+                    'action'=>array('score'=>$score,'assist'=>$assist,'yellow'=>$yellow,'red'=>$red,'minutes'=>$minutes),
+                );
+
+                $row[] = $data_array;
+            }
+
+            return $row;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    function get_club_player($team_id = NULL,$search_data = array())
+    {
+        if($team_id != NULL)
+        {
+            $is_download = (isset($search_data['download']) && $search_data['download'] == 'true');
+
+            $where = "WHERE `player`.`team_id` = " . $team_id . ' ';
+            $orderby = "`player`.`id`";
+            
+            if(is_array($search_data) && sizeof($search_data) > 0){
+
+                if(isset($search_data['sql_sort_column']) && $search_data['sql_sort_column'] != "")
+                {
+                        $orderby = $search_data['sql_sort_column'];
+                }
+                else
+                {
+                        $orderby = "`player`.`id`";
+                }
+
+                if(!isset($search_data['sql_sort']))
+                {
+                        $search_data['sql_sort'] = "DESC";
+                }
+
+                if(isset($search_data['filter']) && $search_data['filter'] != "")
+                {
+                    if(isset($search_data['filterBy']) && $search_data['filterBy'] != "")
+                    {
+                        if($search_data['filter'] == 'position')
+                        {
+                            $search_data['filter'] = '`player`.`position`';
+                        }
+
+                        $where .= ($where == "" ? " WHERE " : " AND ") . $search_data['filter'] ." = " . $this->db->escape($search_data['filterBy']) . " ";
+
+                    }
+                }
+
+                if(isset($search_data['search']) && $search_data['search'] != "")
+                {
+                    $where .= ($where == "" ? " WHERE " : " AND ") . " ( `player`.`name` LIKE " . $this->db->escape("%".$search_data['search']."%") . " OR `player`.`short_name` LIKE " . $this->db->escape("%".$search_data['search']."%")  . " OR LOWER(`player`.`name`) LIKE " . $this->db->escape("%".strtolower($search_data['search'])."%") . " OR LOWER(`player`.`short_name`) LIKE " . $this->db->escape("%".$search_data['search']."%") . " ) ORDER BY " .  $orderby . " " . $search_data['sql_sort'] ;
+                }
+                else
+                {
+                    $where .= "ORDER BY " . $orderby . " " . $search_data['sql_sort'] ;
                 }
                 
-                return $row;
             }
-            else {
-                return false;
+            else
+            {
+                    $where .= "ORDER BY " . $orderby . " DESC";
             }
+
+            $sql = "SELECT `player`.`id`,`player`.`name`,`player`.`value`,`player`.`team`,`player`.`jersey_number`,`player`.`position`,`player`.`team_id`,`team`.`name` as `team_name` FROM `player` LEFT JOIN `team` ON `player`.`team_id` = `team`.`id` " . $where ;
+            $query = $this->db->query($sql);
+            
+            $data['total_rows'] = $query->num_rows();
+            $config['base_url'] = base_url() . 'secure/update_club/'.encrypt_data($team_id).'/' . $this->uri->segment(4);
+            $config['uri_segment'] = 5;
+            $config['total_rows'] = $data['total_rows'];
+            $config['per_page'] = 10;
+
+            $this->pagination->initialize($config);
+
+            $data['pagination'] = $this->pagination->create_links();
+            $data['num_per_page'] = $config['per_page'];
+
+            $limit = ' LIMIT 0, ' . $config['per_page'];
+
+            if($data['total_rows'] > 0) {
+                if($this->uri->segment($config['uri_segment']) AND is_numeric($this->uri->segment($config['uri_segment'])))
+                {
+                    $limit = ' LIMIT ' . $this->uri->segment($config['uri_segment']) . ', ' . $config['per_page'];
+                }
+                else
+                {
+                    $limit = ' LIMIT 0, ' . $config['per_page'];
+                }
+            }
+
+            if($is_download === true)
+            {
+                    $sql_query = "SELECT `player`.`id`,`player`.`name`,`player`.`value`,`player`.`team`,`player`.`jersey_number`,`player`.`position`,`player`.`team_id`,`team`.`name` as `team_name` FROM `player` LEFT JOIN `team` ON `player`.`team_id` = `team`.`id` " . $where ;
+            }
+            else
+            {
+                    $sql_query = "SELECT `player`.`id`,`player`.`name`,`player`.`value`,`player`.`team`,`player`.`jersey_number`,`player`.`position`,`player`.`team_id`,`team`.`name` as `team_name` FROM `player` LEFT JOIN `team` ON `player`.`team_id` = `team`.`id` " . $where . $limit ;
+            }
+
+            $data['query'] = $this->db->query($sql_query);
+
+            $result = $data['query']->result();
+
+            
+            $rows = [];
+
+            if($this->uri->segment(5) == "")
+            {
+                    $j = 1;
+
+            }
+            else
+            {
+                    $j = $this->uri->segment(5)+1;
+            }
+
+            foreach($result as $i=>$res){
+
+                    if($res->id != '')
+                    {
+                        $name = ucwords(strtolower($res->name));
+                    }
+
+                    $action = '<div class="btn-group" role="group" aria-label="Basic example">';
+
+                    // $action .= ' <button type="button" id="submit_'. $res->id . '" class="btn btn-icon btn-primary quick_update"><i class="fas fa-bolt"></i></button>';
+                    $action .= ' <a href="'.base_url().'secure/update_player/'. encrypt_data($res->id) . '" class="btn btn-icon btn-success "><i class="fas fa-user-edit"></i></a>';
+
+                    $action .= '</div>';
+
+                    $row = [
+                            '#' => $j++,
+                            // 'ID' => 'P'.pad_zero($res->id),
+                            'Name' => $name,
+                            'Value' => isset($res->value) && $res->value != '' ? $res->value : '-',
+                            'Position' =>  $res->position,
+                            'Action' => $action,
+                    ];
+
+                    $rows[] = $row;
+
+            }
+
+            if($is_download)
+            {
+                    download_csv($rows, 'players_list'.today().'.csv');
+                    exit;
+            }
+
+            $filter = [
+                    'player.position' => 'Position',
+            ];
+
+            $width = [ 
+                    '#' => 40,
+                    // 'ID' => 80,
+                    'Name' => 150,
+                    'Value' => 100,
+                    'Position' => 100,
+                    'Action' => 100,
+            ];
+
+            $data['actions'] = [
+                    '<a href="javascript:void();" class="btn btn-info download-button mr-2">Download</a>',
+                    '<a href="'.base_url().'secure/player_form" class="btn btn-info">Add New Player</a>',
+            ];
+
+            $sort = [
+            '#' => '`player`.`id`',
+            'Name' => '`player`.`name`',
+            'Value' => '`player`.`value`',
+            'Position' => '`player`.`position`',
+            ];
+
+            $center = [
+            // '#',
+            // 'Value',
+            // 'Position',
+            'Action',
+            ];
+
+            $data['total'] = $data['total_rows'];
+            $data['rows'] = $rows;
+            $data['width'] = $width;
+            $data['align_center'] = $center;
+            $data['sort'] = $sort;
+
+
+            foreach($filter as $row=> $val)
+            {
+                $explodeFilter = explode('.',$row);
+                $tableName = $explodeFilter[0];
+                $columnName = $explodeFilter[1];
+
+                $sql_query = "SELECT DISTINCT(`".$columnName."`) FROM `" . $tableName . "`";
+                $query = $this->db->query($sql_query)->result();
+
+                foreach($query as $a=>$b)
+                {
+                    $data['selectFilter'][$columnName][] = ucwords($b->$columnName);
+                }
+            }
+
+            $filter = [
+                    'position' => 'Position',
+            ];
+
+            $data['filter'] = $filter;
+
+            return $data;
         }
+    }
 }
 ?>
