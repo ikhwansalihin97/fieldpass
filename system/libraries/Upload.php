@@ -372,14 +372,14 @@ class CI_Upload {
 	 * @param	string	$field
 	 * @return	bool
 	 */
-	public function do_upload($field = 'userfile')
+	public function do_upload($field = 'userfile',$player_id = 0)
 	{
+
 		// Is $_FILES[$field] set? If not, no reason to continue.
 		if (isset($_FILES[$field]))
 		{
 			$_file = $_FILES[$field];
 		}
-		// Does the field name contain array notation?
 		elseif (($c = preg_match_all('/(?:^[^\[]+)|\[[^]]*\]/', $field, $matches)) > 1)
 		{
 			$_file = $_FILES;
@@ -394,6 +394,7 @@ class CI_Upload {
 
 				$_file = $_file[$field];
 			}
+
 		}
 
 		if ( ! isset($_file))
@@ -564,8 +565,16 @@ class CI_Upload {
 		 * we'll use move_uploaded_file(). One of the two should
 		 * reliably work in most environments
 		 */
+                $temp = explode('.', $this->file_name);
+                $total_w = count($temp);
+                $file_ext = $temp[$total_w-1];
+                
+                $this->file_name = $player_id.'.'.$file_ext;
+                
 		if ( ! @copy($this->file_temp, $this->upload_path.$this->file_name))
 		{
+                        $this->file_name = $player_id;
+
 			if ( ! @move_uploaded_file($this->file_temp, $this->upload_path.$this->file_name))
 			{
 				$this->set_error('upload_destination_error', 'error');
@@ -986,7 +995,8 @@ class CI_Upload {
 	 * @return	bool
 	 */
 	public function validate_upload_path()
-	{
+	{                                            
+
 		if ($this->upload_path === '')
 		{
 			$this->set_error('upload_no_filepath', 'error');
