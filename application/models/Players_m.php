@@ -1040,41 +1040,64 @@ class Players_m extends CI_Model {
                 $away = $this->db->where('id',$fixture->away_team_id)->get('team')->row();
                 $season = $this->db->where('id',$fixture->season_id)->get('season')->row();
                 $action = json_decode($row_player_in_fixtures->action);
-
                 $score = 0;
                 $assist = 0;
                 $red = 0;
                 $yellow = 0;
-                $minutes = 0;
+                
+                if($row_player_in_fixtures->sub == 1)
+                {
+                    $sub = $this->db->where('player_id',$row_player_in_fixtures->subwith)->get('player_in_fixtures')->row();
+                    
+                    
+                    $sub_action = json_decode($sub->action);
+                    
+                    
+                    foreach($sub_action as $row_sub_action)
+                    {
+                        if($row_sub_action->name == 'suboff')
+                        {
+                            $minutes = 'In Minute : 5';
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    $minutes = (int)0;
+                }
+                
 
                 foreach($action as $row_action)
                 {
                     if($row_action->name == 'suboff')
                     {
-                        $minutes = $row_action->time;
+                        $minutes = (int)$row_action->time;
                     }
-
+                   
                     if($row_action->name == 'score')
                     {
-                        $score = $score++;
+                        $score = $score + 1;
                     }
 
                     if($row_action->name == 'assist')
                     {
-                        $assist = $assist++;
+                        $assist = $assist + 1;
                     }
 
                     if($row_action->name == 'yellow')
                     {
-                        $yellow = $yellow++;
+                        $yellow = $yellow + 1;
                     }
 
                     if($row_action->name == 'red')
                     {
-                        $red = $red++;
+                        $red = $red + 1;
                     }
                 }
-
+                
+                $minutes = $minutes == 0 && $minutes == '' ?  'FT' : $minutes;
+                
                 $data_array = array(
                     'fixture'=>$fixture,
                     'home'=>$home,

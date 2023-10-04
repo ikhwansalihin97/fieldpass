@@ -214,6 +214,7 @@ class Secure extends CI_Controller {
                     $data['team'] = $this->Team_m->get_team();
                     
                     $data['match_history'] = $this->Players_m->player_match_history($player_id);
+                    
                     $this->load->view('secure/dashboard/player_form_v.php', $data);
 		}
 	}

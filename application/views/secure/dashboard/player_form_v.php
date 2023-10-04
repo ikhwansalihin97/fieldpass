@@ -243,7 +243,7 @@ $this->load->view('secure/m_header');
                                                             </span>
                                                             <div class="d-flex flex-column text-dark-75">
                                                                     <span class="font-weight-bolder font-size-sm">Minutes Played</span>
-                                                                    <span class="font-size-h5 font-weight-bold"><?php echo isset($minutes) && $minutes != '' ? $minutes : '0';?> min</span>
+                                                                    <span class="font-size-h5 font-weight-bold"><?php echo isset($minutes) && is_int($minutes) ? $minutes . ' min' : $minutes;?></span>
                                                             </div>
                                                     </div>
                                                     <!--end: Item-->
