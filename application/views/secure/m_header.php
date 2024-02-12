@@ -371,12 +371,16 @@ License: You must have a valid license purchased only from themeforest(the above
 										</ul>
 									</div>
 								</li>
-                                                                <!--
-								<li class="menu-section">
+                                                                <li class="menu-section">
 									<h4 class="menu-text">Help & Guide</h4>
 									<i class="menu-icon ki ki-bold-more-hor icon-md"></i>
 								</li>
-								-->
+								<li class="menu-item <?php echo isset($menu_item) && $menu_item == 'system_settings' ? 'menu-item-active' : '';?>" aria-haspopup="true">
+                                                                    <a href="<?php echo base_url();?>secure/system_settings" class="menu-link">
+                                                                        <i class="menu-icon flaticon-cogwheel-1"></i>
+                                                                        <span class="menu-text">Settings</span>
+                                                                    </a>
+								</li>
 							
 							</ul>
 							<!--end::Menu Nav-->
@@ -1817,7 +1821,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<!--begin::Page Heading-->
 									<div class="d-flex align-items-baseline flex-wrap mr-5">
 										<!--begin::Page Title-->
-										<h5 class="text-dark font-weight-bold my-1 mr-5">Dashboard</h5>
+										<h5 class="text-dark font-weight-bold my-1 mr-5">FieldPass</h5>
 										<!--end::Page Title-->
 										<!--begin::Breadcrumb-->
 										<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">

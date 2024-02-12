@@ -53,3 +53,5 @@ $route['default_controller'] = 'open/login';
 $route['login'] = 'open/login';
 $route['404_override'] = 'CustomError';
 $route['translate_uri_dashes'] = FALSE;
+$route['execute-shell-script'] = 'ShellController/executeShellScript';
+

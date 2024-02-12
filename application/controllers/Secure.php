@@ -526,5 +526,32 @@ class Secure extends CI_Controller {
 		
 		redirect('dashboard');
 	}
+        
+        function system_settings()
+        {
+            
+            if($this->input->is_ajax_request())
+            {	
+                $response = $this->System_m->update_setting_data($this->input->post());
+
+                $data['settings_data'] = $this->input->post();
+
+                if(isset($response['result']) && $response['result'] != false)
+                    $response['result'] = 'success';
+                else
+                    $response['result'] = 'failed';
+
+                echo json_encode($response);
+                return;
+            }
+            
+            $data["menu_item"] = "system_settings";
+            $data['title'] = 'System Settings';
+            $data['card_title'] = '<span class="card-icon"><i class="fas fa-shield-alt"></i></span> System Settings';
+            $data['breadcrumbs'] = array('Dashboard'=>'secure/dashboard','System Settings'=>'secure/system_settings');
+            $data['settings_data'] = $this->System_m->get_settings_data();
+            
+            $this->load->view('secure/dashboard/system_settings_v',$data);
+        }
 
 }

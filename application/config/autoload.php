@@ -137,4 +137,5 @@ $autoload['model'] = array(
 'Players_m',
 'Team_m',
 'Match_m',
+'System_m',
 );
