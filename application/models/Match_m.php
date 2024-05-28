@@ -366,6 +366,8 @@ class Match_m extends CI_Model {
 	{
 		if(isset($post) && sizeof($post) > 0)
 		{
+			print_r($post);die;
+
 			// ad($post);
 			// exit('s');
 			/* Array
@@ -574,7 +576,6 @@ class Match_m extends CI_Model {
 					return $substitution_result;
 				}
 			}
-			print_r($post['action']);die;
 			if(isset($post['action']) && $post['action'] != '')
 			{
 				if($post['action'] == 'score')
