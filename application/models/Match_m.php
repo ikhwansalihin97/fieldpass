@@ -366,7 +366,6 @@ class Match_m extends CI_Model {
 	{
 		if(isset($post) && sizeof($post) > 0)
 		{
-			print_r($post);die;
 
 			// ad($post);
 			// exit('s');
@@ -594,6 +593,8 @@ class Match_m extends CI_Model {
 				{
 					return $update_fixture_actions;
 				}
+			}else{
+				$update_fixture_actions = $this->update_match_actions($post['id']);
 			}
 			
 			// [home_lineup_change_out] => 10
